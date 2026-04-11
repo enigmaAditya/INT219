@@ -1,0 +1,67 @@
+#body{
+    background: linear-gradient(to right, rgba(255, 0, 0, 0.5), rgba(0, 255, 0, 0.5), rgba(0, 0, 255, 0.5));
+
+}
+.Body{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    
+}
+.Body .product{
+    background-color: white;
+    border: 1px solid black;
+    border-radius:5px;
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+    grid-template-columns: repeat(2, 3fr);
+}
+.Body .product .nearest-seller{
+    background-color: lightgray;
+    border: 1px solid black;
+    border-radius:5px;
+    text-align: center;
+    grid-column: 1 / 3; 
+}
+.Body .product .box{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+
+.Body .product .box .nearest-seller{
+    justify-content: left;
+    background-color: lightblue;
+    border: 1px solid lightblue;
+    border-radius:5px;
+    margin: 5px;
+    text-align: center;
+}
+
+.Body .product .price{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.Body .product .delivery{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.Body .product .add-to-cart{
+    background-color: lightgreen;
+    border: 1px solid lightgreen;
+    border-radius:5px;
+    margin-right:130px;
+    padding:10px;
+    cursor: pointer;
+}
+.Body .product .buy-now{
+    background-color: lightgreen;
+    border: 1px solid lightgreen;
+    border-radius:5px;
+    padding:10px;
+    cursor: pointer;
+}

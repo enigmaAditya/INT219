@@ -1,0 +1,29 @@
+#heading{
+    color:purple;
+    font-size: medium;
+}
+
+#newHeading{
+    background-color: lightgray;
+    color:green;
+}
+
+#heading2{
+    background-color: lightpink;
+    color:rgb(77, 4, 57);
+    
+}
+
+.box{
+    height: 150px;
+    width: 150px;
+    margin: 10px;
+    border: 10px solid black;
+    border-radius: 5px;
+    border-color: violet;
+    box-sizing: border-box;
+    background-color: lightblue;
+    text-align: center;
+    text-decoration:line-through;
+    text-decoration-color:chartreuse;
+}

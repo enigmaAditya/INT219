@@ -1,0 +1,136 @@
+
+:root {
+    --bg-dark: #0f172a;
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --accent-blue: #38bdf8;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: black;
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 1.6;
+}
+
+main {
+    width: 100%;
+    max-width: 1100px;
+    padding: 2rem;
+    text-align: center;
+}
+
+h1 {
+    font-size: 3rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    background-color: white;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.sub-heading {
+    color: white;
+    max-width: 1000px;
+    margin: 0 auto 3rem;
+    font-size: 1.1rem;
+}
+
+.container {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    align-items: stretch;
+    flex-wrap: wrap;
+}
+
+.left{
+    flex: 1;
+    min-width: 320px;
+    background: black;
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    padding: 3rem;
+    text-align: left;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+.right {
+    flex: 1;
+    min-width: 320px;
+    background:white;
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    padding: 3rem;
+    text-align: left;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.add {
+    margin-bottom: 2rem;
+}
+
+.add:last-child {
+    margin-bottom: 0;
+}
+
+.add p span {
+    display: block;
+    color: var(--accent-blue);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+}
+
+.add p:not(.label) {
+    font-size: 1.1rem;
+    color: var(--text-main);
+}
+
+.right span {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    color: black;
+}
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+input, textarea {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    color: white;
+    border: none;
+    border-bottom: 1px solid black;
+    border-radius: 0;
+    padding: 1rem 0;
+    outline: none;
+}
+
+button {
+    background-color: skyblue;
+    color: var(--bg-dark);
+    border: none;
+    padding: 1rem;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 0.5rem;
+}

@@ -1,0 +1,44 @@
+<!-- grid container:  -->
+<!-- what is a grid container: A grid container is an element that has `display: grid` applied to it. It defines a grid layout and serves as the parent container for all grid items within it. Grid containers are responsible for managing the overall structure and alignment of their child grid items. 
+    align-content: This property controls the alignment of grid lines within the grid container along the block axis (vertical axis in a standard document flow). It specifies how to distribute space between and around grid lines. 
+    align-items: This property controls the alignment of grid items within their grid cells along the block axis. It specifies how to align grid items within their respective grid cells. 
+    display: grid: This property is used to define an element as a grid container. It enables the use of CSS Grid Layout, allowing you to create complex and responsive grid-based designs.
+    grid-auto-rows: This property specifies the size of rows that are created automatically in a
+    row-gap: This property specifies the gap (spacing) between rows in a grid layout. It defines the vertical space between grid rows.
+    column-gap: This property specifies the gap (spacing) between columns in a grid layout. It defines the horizontal space between grid columns.
+    gap: This property is a shorthand for setting both `row-gap` and `column-gap` in a grid layout. It defines the spacing between rows and columns in a grid container.
+    grid: This property is a shorthand for defining grid-template-rows, grid-template-columns, and grid-template-areas in a grid container. It allows you to set up the overall structure of the grid layout.
+    grid-template-areas: This property defines named grid areas within a grid container. It allows you to create a visual representation of the grid layout using named areas, making it easier to position grid items.
+    grid-template-columns: This property defines the number and size of columns in a grid layout. It specifies how many columns the grid should have and their respective widths.
+    grid-template-rows: This property defines the number and size of rows in a grid layout
+    grid-auto-columns: This property specifies the size of columns that are created automatically in a grid layout when there are more grid items than defined columns.
+    grid layout when there are more grid items than defined rows.
+    justify-content: This property controls the alignment of grid lines within the grid container along the inline axis (horizontal axis in a standard document flow). It specifies how to distribute space between and around grid lines.
+    place-content: This property is a shorthand for setting both `align-content` and `justify-content` in a grid container. It allows you to control the alignment of grid lines along both axes.
+-->
+<!--what are shorthand properties: Shorthand properties in CSS are properties that allow you to set multiple related CSS properties in a single declaration. They simplify the writing of CSS code by combining several individual properties into one. For example, the `gap` property is a shorthand for `row-gap` and `column-gap`, and `grid` is a shorthand for `grid-template-rows`, `grid-template-columns`, and `grid-template-areas`.-->
+<!-- grid columns with fractional units: Fractional units (fr) in CSS Grid Layout are a flexible way to define the size of grid columns and rows. The `fr` unit represents a fraction of the available space in the grid container. For example, if you have a grid with three columns defined as `1fr 2fr 1fr`, the second column will take up twice the space of the first and third columns. This allows for responsive and dynamic layouts that adapt to the size of the container. -->
+<!--grid columns with the minmax() function: The `minmax()` function in CSS Grid Layout allows you to define a size range for grid tracks (columns or rows). For example, `minmax(100px, 1fr)` creates a column that is at least 100px wide but can grow to take up available space. This is useful for creating responsive and flexible grid layouts. -->
+<!--grid columns with repeat() function: The `repeat()` function in CSS Grid Layout allows you to define a repeated pattern of grid tracks (columns or rows). For example, `repeat(3, 1fr)` creates three columns of equal width using the `fr` unit. This is useful for creating consistent and scalable grid layouts. -->
+<!--the css place-content property: The `place-content` property is a shorthand for setting both `align-content` and `justify-content` in a grid container. It allows you to control the alignment of grid lines along both axes in a single declaration. For example, `place-content: start center` aligns grid lines to the start of the container along the block axis and centers them along the inline axis. -->
+<!---->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="grid1.css">
+</head>
+<body>
+    <h1>CSS Grid Layout</h1>
+    <p> The Grid layout module offers a grid-based layout system, with r</p>
+
+    <div class="container">
+        <div class="header"><h2>My Header</h2></div>
+        <div class="menu"><a href="#">Link 1</a><br><a href="#">Link 2</a></div>
+        <div class="content"><h3>Learn to create a Grid</h3></div>
+        <div class="footer"><h4>Footer</h4></div>
+    </div>
+</body>
+</html>

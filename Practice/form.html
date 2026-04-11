@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .form-group {
+        margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"],
+        input[type="tel"],
+        input[type="url"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        /* Style for invalid inputs */
+        input:invalid:not(:placeholder-shown) {
+            border-color: #e74c3c;
+        }
+
+        button[type="submit"] {
+            background: #007bff;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    
+
+<form action="/submit" method="POST" id="myForm">
+
+    <!-- TEXT INPUT -->
+    <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username"
+               placeholder="Enter username"
+               required
+               minlength="3"
+               maxlength="20">
+    </div>
+
+    <!-- EMAIL -->
+    <div class="form-group">
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email"
+    placeholder="you@example.com" required>
+</div>
+
+    <!-- PASSWORD -->
+    <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password"
+               placeholder="Min 8 characters"
+               required minlength="8">
+    </div>
+
+    <!-- NUMBER -->
+    <div class="form-group">
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age"
+               min="18" max="100" value="25">
+    </div>
+
+    <!-- DATE -->
+    <div class="form-group">
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" name="dob">
+    </div>
+
+    <!-- TEL (phone) -->
+    <div class="form-group">
+        <label for="phone">Phone:</label>
+        <input type="tel" id="phone" name="phone"
+               placeholder="+1-234-567-8900">
+    </div>
+
+    <!-- URL -->
+    <div class="form-group">
+        <label for="website">Website:</label>
+        <input type="url" id="website" name="website"
+               placeholder="https://example.com">
+    </div>
+
+    <!-- COLOR PICKER -->
+    <div class="form-group">
+        <label for="favcolor">Favorite Color:</label>
+        <input type="color" id="favcolor" name="favcolor" value="#007bff">
+    </div>
+
+    <!-- RANGE (slider) -->
+    <div class="form-group">
+        <label for="rating">Rating: <span id="ratingValue">5</span></label>
+        <input type="range" id="rating" name="rating"
+               min="1" max="10" value="5">
+    </div>
+
+    <!-- FILE UPLOAD -->
+    <div class="form-group">
+        <label for="avatar">Upload Photo:</label>
+        <input type="file" id="avatar" name="avatar"
+               accept="image/*">
+    </div>
+
+    <!-- RADIO BUTTONS (pick ONE) -->
+    <div class="form-group">
+        <p>Gender:</p>
+        <label><input type="radio" name="gender" value="male" required> Male</label>
+        <label><input type="radio" name="gender" value="female"> Female</label>
+        <label><input type="radio" name="gender" value="other"> Other</label>
+    </div>
+
+    <!-- CHECKBOXES (pick MULTIPLE) -->
+    <div class="form-group">
+        <p>Skills:</p>
+        <label><input type="checkbox" name="skills" value="html"> HTML</label>
+        <label><input type="checkbox" name="skills" value="css"> CSS</label>
+        <label><input type="checkbox" name="skills" value="js"> JavaScript</label>
+    </div>
+
+    <!-- DROPDOWN / SELECT -->
+    <div class="form-group">
+        <label for="country">Country:</label>
+        <select id="country" name="country">
+            <option value="" disabled selected>Choose...</option>
+            <option value="us">United States</option>
+            <option value="uk">United Kingdom</option>
+            <option value="in">India</option>
+            <option value="ca">Canada</option>
+        </select>
+    </div>
+
+    <!-- TEXTAREA (multi-line) -->
+    <div class="form-group">
+        <label for="bio">Bio:</label>
+        <textarea id="bio" name="bio" rows="4" cols="50"
+                  placeholder="Tell us about yourself..."></textarea>
+    </div>
+
+    <!-- HIDDEN INPUT (sends data user doesn't see) -->
+    <input type="hidden" name="formType" value="registration">
+
+    <!-- BUTTONS -->
+    <button type="submit">Submit</button>
+    <button type="reset">Clear Form</button>
+
+</form>

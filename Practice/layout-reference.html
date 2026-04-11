@@ -1,0 +1,1752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Box Model, Flexbox & Grid — Complete Visual Reference</title>
+    <style>
+        /* ============================================================
+           BASE RESET & STYLES
+           ============================================================ */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            /*
+                box-sizing: border-box
+                ─────────────────────────
+                WITHOUT (content-box — default):
+                  width: 200px + padding: 20px + border: 5px = 250px TOTAL
+                  → what you set is NOT what you get
+                  
+                WITH (border-box):
+                  width: 200px TOTAL (padding + border eat into the 200px)
+                  → what you set IS what you get
+                  
+                ALWAYS use border-box. It's industry standard.
+            */
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f0f2f5;
+        }
+
+        /* ── Navigation ── */
+        .main-nav {
+            position: sticky;
+            /*
+                position: sticky
+                ──────────────────
+                - Acts like "relative" normally
+                - When you scroll past it, it STICKS at top: 0
+                - Stays fixed until its parent scrolls out of view
+                - Requires a top/bottom value to know WHERE to stick
+            */
+            top: 0;
+            background: #1a1a2e;
+            padding: 15px 5%;
+            z-index: 100;
+            display: flex;
+            /*
+                display: flex on the nav:
+                - All child links become flex items
+                - They sit in a ROW by default
+                - We can control spacing with gap
+            */
+            gap: 20px;
+            flex-wrap: wrap;
+            /*
+                flex-wrap: wrap
+                ──────────────────
+                - If links don't fit in one line, they wrap to next line
+                - Without wrap: items squeeze/overflow
+                - With wrap: items go to next row gracefully
+            */
+            justify-content: center;
+        }
+
+        .main-nav a {
+            color: #aaa;
+            text-decoration: none;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            /*
+                transition: all 0.3s ease
+                ──────────────────────────
+                - "all" → animate ANY property that changes
+                - "0.3s" → animation takes 0.3 seconds
+                - "ease" → starts slow, speeds up, slows down
+                
+                Without transition: color/background changes INSTANTLY
+                With transition: changes SMOOTHLY over 0.3 seconds
+            */
+        }
+
+        .main-nav a:hover {
+            color: white;
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* ── Page Title ── */
+        .page-title {
+            text-align: center;
+            padding: 50px 20px 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            /*
+                linear-gradient(direction, color1, color2)
+                ────────────────────────────────────────────
+                135deg → diagonal from top-left to bottom-right
+                Creates a smooth color transition
+            */
+            color: white;
+        }
+
+        .page-title h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .page-title p { opacity: 0.9; font-size: 1.1rem; }
+
+        /* ── Section Styles ── */
+        .section {
+            max-width: 1200px;
+            margin: 0 auto;
+            /*
+                margin: 0 auto
+                ──────────────────
+                0 → top and bottom margin = 0
+                auto → left and right margins are EQUAL
+                → Element is CENTERED horizontally
+                ⚠️ Only works on BLOCK elements with a set width/max-width
+            */
+            padding: 40px 20px;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: #1a1a2e;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            /*
+                border-bottom only:
+                ──────────────────
+                Instead of border on all 4 sides,
+                we only want a line at the bottom.
+                Creates a visual separator under the heading.
+            */
+        }
+
+        .section-desc {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1rem;
+        }
+
+        /* ── Subsection ── */
+        .subsection {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            /*
+                box-shadow: horizontal vertical blur color
+                ─────────────────────────────────────────────
+                0 → no horizontal offset
+                2px → 2px DOWN
+                10px → 10px blur (softness)
+                rgba(0,0,0,0.06) → very subtle black shadow (6% opacity)
+            */
+        }
+
+        .subsection h3 {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .subsection .explanation {
+            color: #555;
+            font-size: 0.92rem;
+            margin-bottom: 20px;
+            line-height: 1.7;
+            background: #f8f9ff;
+            padding: 12px 16px;
+            border-left: 4px solid #667eea;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .subsection .explanation code {
+            background: #e8e8f8;
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.88em;
+            color: #444;
+        }
+
+        /* ── Demo Container (the visual example area) ── */
+        .demo {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 15px;
+            min-height: 60px;
+            background: #fafafa;
+            position: relative;
+            /* 
+                position: relative
+                ─────────────────────
+                This doesn't move the element.
+                It makes THIS element the reference point
+                for any position:absolute children inside it.
+            */
+        }
+
+        /* ── Demo Items (colored boxes inside demos) ── */
+        .demo .item {
+            background: #667eea;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .demo .item:nth-child(2) { background: #764ba2; }
+        /*
+            :nth-child(2)
+            ─────────────────
+            Selects the 2nd child element.
+            :nth-child(odd) → 1st, 3rd, 5th...
+            :nth-child(even) → 2nd, 4th, 6th...
+            :nth-child(3n) → every 3rd (3, 6, 9...)
+        */
+        .demo .item:nth-child(3) { background: #e84393; }
+        .demo .item:nth-child(4) { background: #00b894; }
+        .demo .item:nth-child(5) { background: #fdcb6e; color: #333; }
+        .demo .item:nth-child(6) { background: #e17055; }
+
+        /* ── Interactive Controls ── */
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 15px;
+            align-items: center;
+        }
+
+        .controls label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #444;
+        }
+
+        .controls select,
+        .controls input[type="range"],
+        .controls input[type="number"] {
+            padding: 6px 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .controls select:focus,
+        .controls input:focus {
+            border-color: #667eea;
+        }
+
+        .controls input[type="range"] {
+            width: 120px;
+            cursor: pointer;
+        }
+
+        .controls input[type="number"] {
+            width: 70px;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #f0f2f5;
+            padding: 6px 12px;
+            border-radius: 6px;
+        }
+
+        .current-value {
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: #667eea;
+            font-weight: 700;
+            min-width: 90px;
+        }
+
+        /* ── Labels on demo items ── */
+        .label-tag {
+            position: absolute;
+            top: -12px;
+            left: 15px;
+            background: #667eea;
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        /* ── Separator between major sections ── */
+        .major-separator {
+            height: 6px;
+            background: linear-gradient(to right, #667eea, #764ba2, #e84393);
+            margin: 20px 0;
+            border-radius: 3px;
+        }
+
+        /* ── Box Model Visual ── */
+        .box-model-visual {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .bm-margin {
+            background: #ffeaa7;
+            padding: 25px;
+            border-radius: 8px;
+            position: relative;
+            transition: padding 0.3s;
+        }
+
+        .bm-border {
+            border: 5px solid #fdcb6e;
+            border-radius: 6px;
+            transition: border-width 0.3s;
+        }
+
+        .bm-padding {
+            background: #81ecec;
+            padding: 25px;
+            transition: padding 0.3s;
+        }
+
+        .bm-content {
+            background: #74b9ff;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            font-weight: 700;
+            border-radius: 4px;
+            min-width: 120px;
+            transition: all 0.3s;
+        }
+
+        .bm-label {
+            position: absolute;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ── Tooltip showing computed sizes ── */
+        .size-info {
+            text-align: center;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #555;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .page-title h1 { font-size: 1.8rem; }
+            .section-title { font-size: 1.5rem; }
+            .subsection { padding: 20px 15px; }
+            .controls { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+         NAVIGATION
+         ============================================================ -->
+    <nav class="main-nav">
+        <a href="#box-model">📦 Box Model</a>
+        <a href="#display">🖥️ Display</a>
+        <a href="#flexbox">🔀 Flexbox</a>
+        <a href="#grid">🔲 Grid</a>
+        <a href="#position">📌 Position</a>
+    </nav>
+
+    <!-- ============================================================
+         PAGE TITLE
+         ============================================================ -->
+    <div class="page-title">
+        <h1>📦 Box Model, Flexbox & Grid</h1>
+        <p>Interactive visual reference — change values and see results instantly</p>
+    </div>
+
+
+    <!-- ============================================================
+         ============================
+         SECTION 1: THE BOX MODEL
+         ============================
+         ============================================================ -->
+    <div class="section" id="box-model">
+        <h2 class="section-title">1. The CSS Box Model</h2>
+        <p class="section-desc">
+            Every HTML element is a rectangular BOX with 4 layers: 
+            Content → Padding → Border → Margin (inside → outside)
+        </p>
+
+        <!-- 1.1 Interactive Box Model -->
+        <div class="subsection">
+            <h3>1.1 Interactive Box Model Visualizer</h3>
+            <div class="explanation">
+                <strong>Think of it like a package:</strong><br>
+                <code>Content</code> = the item inside the box<br>
+                <code>Padding</code> = bubble wrap around the item (INSIDE the box)<br>
+                <code>Border</code> = the box walls themselves<br>
+                <code>Margin</code> = space between this box and other boxes on the shelf<br><br>
+                <strong>Key Rule:</strong> <code>box-sizing: border-box</code> makes 
+                width/height INCLUDE padding and border. Without it, they're ADDED on top.
+            </div>
+
+            <div class="box-model-visual" id="bmVisual">
+                <div class="bm-margin" id="bmMargin" style="position:relative;">
+                    <span class="bm-label" style="top:-18px;left:50%;transform:translateX(-50%);color:#e17055;">
+                        MARGIN
+                    </span>
+                    <div class="bm-border" id="bmBorder" style="position:relative;">
+                        <span class="bm-label" style="top:-14px;left:10px;color:#fdcb6e;">BORDER</span>
+                        <div class="bm-padding" id="bmPadding" style="position:relative;">
+                            <span class="bm-label" style="top:2px;left:10px;color:#00695c;font-size:0.65rem;">PADDING</span>
+                            <div class="bm-content" id="bmContent">
+                                CONTENT<br>
+                                <span id="contentSize" style="font-size:0.8rem;">200 × 100</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="size-info" id="totalSize">
+                Total rendered size: calculating...
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>Content W:</label>
+                    <input type="range" id="contentWidth" min="80" max="300" value="200">
+                    <span class="current-value" id="contentWidthVal">200px</span>
+                </div>
+                <div class="control-group">
+                    <label>Content H:</label>
+                    <input type="range" id="contentHeight" min="40" max="200" value="100">
+                    <span class="current-value" id="contentHeightVal">100px</span>
+                </div>
+                <div class="control-group">
+                    <label>Padding:</label>
+                    <input type="range" id="bmPaddingVal" min="0" max="50" value="25">
+                    <span class="current-value" id="paddingDisplay">25px</span>
+                </div>
+                <div class="control-group">
+                    <label>Border:</label>
+                    <input type="range" id="bmBorderVal" min="0" max="20" value="5">
+                    <span class="current-value" id="borderDisplay">5px</span>
+                </div>
+                <div class="control-group">
+                    <label>Margin:</label>
+                    <input type="range" id="bmMarginVal" min="0" max="50" value="25">
+                    <span class="current-value" id="marginDisplay">25px</span>
+                </div>
+                <div class="control-group">
+                    <label>box-sizing:</label>
+                    <select id="boxSizing">
+                        <option value="content-box">content-box (default)</option>
+                        <option value="border-box" selected>border-box ✅</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 1.2 Margin Collapse -->
+        <div class="subsection">
+            <h3>1.2 Margin Collapse</h3>
+            <div class="explanation">
+                When two <strong>vertical margins</strong> touch (top margin meets bottom margin), 
+                they DON'T add up — the <strong>larger one wins</strong>.<br>
+                Box 1 has <code>margin-bottom: 30px</code>, Box 2 has <code>margin-top: 20px</code>.<br>
+                Space between them = <strong>30px</strong> (NOT 50px!). The 30px "absorbs" the 20px.<br><br>
+                ⚠️ This ONLY happens vertically, between block elements, and NOT in flex/grid containers.
+            </div>
+
+            <div class="demo" style="background: white;">
+                <div style="background:#667eea;color:white;padding:20px;text-align:center;border-radius:6px;
+                            margin-bottom:30px;">
+                    Box 1 — margin-bottom: <strong>30px</strong>
+                </div>
+                <div style="background:#764ba2;color:white;padding:20px;text-align:center;border-radius:6px;
+                            margin-top:20px;">
+                    Box 2 — margin-top: <strong>20px</strong>
+                </div>
+                <p style="text-align:center;margin-top:15px;color:#e17055;font-weight:600;">
+                    ↕ Actual gap = 30px (larger wins), NOT 50px
+                </p>
+            </div>
+        </div>
+
+        <!-- 1.3 Padding Shorthand -->
+        <div class="subsection">
+            <h3>1.3 Padding & Margin Shorthand</h3>
+            <div class="explanation">
+                Both padding and margin use the same shorthand patterns:<br><br>
+                <code>padding: 20px;</code> → all 4 sides = 20px<br>
+                <code>padding: 20px 40px;</code> → top/bottom = 20px, left/right = 40px<br>
+                <code>padding: 10px 20px 30px;</code> → top = 10, left/right = 20, bottom = 30<br>
+                <code>padding: 10px 20px 30px 40px;</code> → top right bottom left (clockwise → TRouBLe)<br><br>
+                <strong>Remember:</strong> T-R-B-L = <strong>T</strong>op <strong>R</strong>ight 
+                <strong>B</strong>ottom <strong>L</strong>eft = TRouBLe
+            </div>
+
+            <div class="demo" id="shorthandDemo">
+                <div style="background:#667eea;color:white;text-align:center;font-weight:600;border-radius:6px;"
+                     id="shorthandBox">
+                    Change my padding ↓
+                </div>
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>Shorthand:</label>
+                    <select id="paddingShorthand">
+                        <option value="20px">20px (all sides)</option>
+                        <option value="10px 40px">10px 40px (V | H)</option>
+                        <option value="10px 30px 50px">10px 30px 50px (T | H | B)</option>
+                        <option value="10px 20px 40px 60px">10px 20px 40px 60px (T R B L)</option>
+                        <option value="0">0 (no padding)</option>
+                    </select>
+                    <span class="current-value" id="shorthandValue">20px</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="major-separator"></div>
+
+
+    <!-- ============================================================
+         ============================
+         SECTION 2: DISPLAY PROPERTY
+         ============================
+         ============================================================ -->
+    <div class="section" id="display">
+        <h2 class="section-title">2. The Display Property</h2>
+        <p class="section-desc">
+            Controls HOW an element behaves in the document flow — 
+            block, inline, inline-block, flex, grid, or none.
+        </p>
+
+        <div class="subsection">
+            <h3>2.1 Block vs Inline vs Inline-Block</h3>
+            <div class="explanation">
+                <code>block</code> → takes FULL width, starts on new line, CAN set width/height<br>
+                <code>inline</code> → only as wide as content, same line, CANNOT set width/height<br>
+                <code>inline-block</code> → sits in line like inline, but CAN set width/height (best of both!)<br>
+                <code>none</code> → completely removed from page (no space taken)<br><br>
+                Default block elements: div, p, h1-h6, section, header, footer, ul, form<br>
+                Default inline elements: span, a, strong, em, img, input
+            </div>
+
+            <div class="demo" id="displayDemo">
+                <span class="item" id="displayBox1" style="display:block;">Block</span>
+                <span class="item" id="displayBox2" style="display:block;background:#764ba2;">Block</span>
+                <span class="item" id="displayBox3" style="display:block;background:#e84393;">Block</span>
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>Display:</label>
+                    <select id="displaySelect">
+                        <option value="block">block — full width, new line</option>
+                        <option value="inline">inline — content width, same line, no width/height</option>
+                        <option value="inline-block">inline-block — same line + CAN set width/height</option>
+                        <option value="none">none — completely hidden</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Width:</label>
+                    <input type="range" id="displayWidth" min="50" max="300" value="150">
+                    <span class="current-value" id="displayWidthVal">150px</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="major-separator"></div>
+
+
+    <!-- ============================================================
+         ============================
+         SECTION 3: FLEXBOX
+         ============================
+         ============================================================ -->
+    <div class="section" id="flexbox">
+        <h2 class="section-title">3. Flexbox (Flexible Box Layout)</h2>
+        <p class="section-desc">
+            1-dimensional layout system — arranges items in a ROW or COLUMN.
+            Perfect for navbars, centering, card rows, and component layouts.
+        </p>
+
+        <!-- 3.1 flex-direction -->
+        <div class="subsection">
+            <h3>3.1 flex-direction — Which way items flow</h3>
+            <div class="explanation">
+                <code>row</code> (default) → items go LEFT to RIGHT →<br>
+                <code>row-reverse</code> → items go RIGHT to LEFT ←<br>
+                <code>column</code> → items go TOP to BOTTOM ↓<br>
+                <code>column-reverse</code> → items go BOTTOM to TOP ↑<br><br>
+                <strong>Important:</strong> When direction changes, the MAIN AXIS and CROSS AXIS swap!<br>
+                Row: main = horizontal, cross = vertical<br>
+                Column: main = vertical, cross = horizontal
+            </div>
+
+            <div class="demo" id="directionDemo" style="display:flex; flex-direction:row; gap:10px; min-height:200px;">
+                <div class="item">1</div>
+                <div class="item">2</div>
+                <div class="item">3</div>
+                <div class="item">4</div>
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>flex-direction:</label>
+                    <select id="flexDirection">
+                        <option value="row">row → (left to right)</option>
+                        <option value="row-reverse">row-reverse ← (right to left)</option>
+                        <option value="column">column ↓ (top to bottom)</option>
+                        <option value="column-reverse">column-reverse ↑ (bottom to top)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3.2 justify-content -->
+        <div class="subsection">
+            <h3>3.2 justify-content — Alignment on MAIN axis</h3>
+            <div class="explanation">
+                Controls how items are distributed along the <strong>main axis</strong>
+                (horizontal when flex-direction is row).<br><br>
+                <code>flex-start</code> → pack items to the START [1][2][3]............<br>
+                <code>center</code> → pack items to the CENTER ........[1][2][3]........<br>
+                <code>flex-end</code> → pack items to the END ............[1][2][3]<br>
+                <code>space-between</code> → first at start, last at end, equal space between: [1]....[2]....[3]<br>
+                <code>space-around</code> → equal space AROUND each item: ..[1]....[2]....[3]..<br>
+                <code>space-evenly</code> → perfectly equal space everywhere: ...[1]...[2]...[3]...
+            </div>
+
+            <div class="demo" id="justifyDemo" style="display:flex; justify-content:flex-start; gap:10px;">
+                <div class="item">1</div>
+                <div class="item">2</div>
+                <div class="item">3</div>
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>justify-content:</label>
+                    <select id="justifyContent">
+                        <option value="flex-start">flex-start (pack to start)</option>
+                        <option value="center">center (pack to middle)</option>
+                        <option value="flex-end">flex-end (pack to end)</option>
+                        <option value="space-between">space-between (edges + equal gaps)</option>
+                        <option value="space-around">space-around (equal space around)</option>
+                        <option value="space-evenly">space-evenly (perfectly even)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3.3 align-items -->
+        <div class="subsection">
+            <h3>3.3 align-items — Alignment on CROSS axis</h3>
+            <div class="explanation">
+                Controls how items align along the <strong>cross axis</strong>
+                (vertical when flex-direction is row).<br><br>
+                <code>stretch</code> (default) → items fill the container height<br>
+                <code>flex-start</code> → items align to the TOP<br>
+                <code>center</code> → items align to the MIDDLE ← most useful!<br>
+                <code>flex-end</code> → items align to the BOTTOM<br>
+                <code>baseline</code> → items align by their text baseline
+            </div>
+
+            <div class="demo" id="alignDemo" style="display:flex; align-items:stretch; gap:10px; min-height:200px;">
+                <div class="item" style="font-size:1rem;">Small</div>
+                <div class="item" style="font-size:1.5rem;">Medium</div>
+                <div class="item" style="font-size:2rem;">Large</div>
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>align-items:</label>
+                    <select id="alignItems">
+                        <option value="stretch">stretch (fill height — default)</option>
+                        <option value="flex-start">flex-start (top)</option>
+                        <option value="center">center (middle)</option>
+                        <option value="flex-end">flex-end (bottom)</option>
+                        <option value="baseline">baseline (text baseline)</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Container height:</label>
+                    <input type="range" id="alignHeight" min="100" max="350" value="200">
+                    <span class="current-value" id="alignHeightVal">200px</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3.4 flex-wrap -->
+        <div class="subsection">
+            <h3>3.4 flex-wrap — Wrap items to next line</h3>
+            <div class="explanation">
+                <code>nowrap</code> (default) → all items squeeze into ONE line (may overflow or shrink)<br>
+                <code>wrap</code> → items move to next line when they don't fit<br>
+                <code>wrap-reverse</code> → wraps but new lines go UPWARD<br><br>
+                <strong>When to use wrap:</strong> Card layouts, responsive grids, any time items 
+                should reorganize on smaller screens. Resize the browser to see wrapping in action!
+            </div>
+
+            <div class="demo" id="wrapDemo" style="display:flex; flex-wrap:wrap; gap:10px;">
+                <div class="item" style="min-width:150px;">Item 1</div>
+                <div class="item" style="min-width:150px;">Item 2</div>
+                <div class="item" style="min-width:150px;">Item 3</div>
+                <div class="item" style="min-width:150px;">Item 4</div>
+                <div class="item" style="min-width:150px;">Item 5</div>
+                <div class="item" style="min-width:150px;">Item 6</div>
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>flex-wrap:</label>
+                    <select id="flexWrap">
+                        <option value="nowrap">nowrap (all on one line)</option>
+                        <option value="wrap" selected>wrap (go to next line)</option>
+                        <option value="wrap-reverse">wrap-reverse (new lines go up)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3.5 gap -->
+        <div class="subsection">
+            <h3>3.5 gap — Space between items</h3>
+            <div class="explanation">
+                <code>gap: 20px</code> → 20px space between ALL items<br>
+                <code>row-gap: 20px</code> → vertical gap only<br>
+                <code>column-gap: 30px</code> → horizontal gap only<br>
+                <code>gap: 20px 30px</code> → row-gap column-gap<br><br>
+                <strong>Why gap is better than margin:</strong> Gap only creates space BETWEEN items, 
+                not around the edges. With margin, you'd get extra space on the first/last items.
+            </div>
+
+            <div class="demo" id="gapDemo" style="display:flex; flex-wrap:wrap; gap:10px;">
+                <div class="item" style="flex:1 1 100px;">1</div>
+                <div class="item" style="flex:1 1 100px;">2</div>
+                <div class="item" style="flex:1 1 100px;">3</div>
+                <div class="item" style="flex:1 1 100px;">4</div>
+                <div class="item" style="flex:1 1 100px;">5</div>
+                <div class="item" style="flex:1 1 100px;">6</div>
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>gap:</label>
+                    <input type="range" id="gapValue" min="0" max="50" value="10">
+                    <span class="current-value" id="gapDisplay">10px</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3.6 flex (child property) -->
+        <div class="subsection">
+            <h3>3.6 flex (Child Property) — How items grow and shrink</h3>
+            <div class="explanation">
+                <code>flex: grow shrink basis</code><br><br>
+                <code>flex-grow</code> → how much this item should GROW to fill extra space (0 = don't grow)<br>
+                <code>flex-shrink</code> → how much to SHRINK when space is tight (0 = don't shrink)<br>
+                <code>flex-basis</code> → initial size before growing/shrinking<br><br>
+                Common shortcuts:<br>
+                <code>flex: 1</code> → grow equally (all items share space evenly)<br>
+                <code>flex: 2</code> → take TWICE the space of flex: 1 items<br>
+                <code>flex: 0 0 300px</code> → don't grow, don't shrink, stay 300px (fixed sidebar)<br>
+                <code>flex: 1 1 300px</code> → grow/shrink, start at 300px (responsive card)
+            </div>
+
+            <div class="demo" id="flexChildDemo" style="display:flex; gap:10px;">
+                <div class="item" id="flexChild1" style="flex:1;">flex: 1</div>
+                <div class="item" id="flexChild2" style="flex:1;">flex: 1</div>
+                <div class="item" id="flexChild3" style="flex:1;">flex: 1</div>
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>Item 1 flex:</label>
+                    <select id="flex1">
+                        <option value="1" selected>1 (equal share)</option>
+                        <option value="2">2 (double share)</option>
+                        <option value="3">3 (triple share)</option>
+                        <option value="0 0 200px">0 0 200px (fixed 200px)</option>
+                        <option value="0 0 auto">0 0 auto (content size)</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Item 2 flex:</label>
+                    <select id="flex2">
+                        <option value="1" selected>1 (equal share)</option>
+                        <option value="2">2 (double share)</option>
+                        <option value="3">3 (triple share)</option>
+                        <option value="0 0 200px">0 0 200px (fixed 200px)</option>
+                        <option value="0 0 auto">0 0 auto (content size)</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Item 3 flex:</label>
+                    <select id="flex3">
+                        <option value="1" selected>1 (equal share)</option>
+                        <option value="2">2 (double share)</option>
+                        <option value="3">3 (triple share)</option>
+                        <option value="0 0 200px">0 0 200px (fixed 200px)</option>
+                        <option value="0 0 auto">0 0 auto (content size)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3.7 Flexbox Recipes -->
+        <div class="subsection">
+            <h3>3.7 Common Flexbox Recipes — Select a pattern</h3>
+            <div class="explanation">
+                These are the most common real-world Flexbox patterns you'll encounter. 
+                Select each one to see both the visual result AND the exact CSS used.
+            </div>
+
+            <div class="controls" style="margin-bottom:15px;">
+                <div class="control-group">
+                    <label>Recipe:</label>
+                    <select id="flexRecipe" style="min-width:250px;">
+                        <option value="navbar">Navbar (logo left, links right)</option>
+                        <option value="center">Perfect Center</option>
+                        <option value="sidebar">Sidebar + Main</option>
+                        <option value="cards">Card Row (wrapping)</option>
+                        <option value="footer">Footer Columns</option>
+                        <option value="input-btn">Input + Button</option>
+                        <option value="vertical-center">Vertical + Horizontal Center</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="demo" id="recipeDemo" style="min-height:150px;">
+                <!-- Filled by JavaScript -->
+            </div>
+
+            <pre id="recipeCode" style="background:#1a1a2e;color:#a8d8ea;padding:20px;border-radius:8px;
+                 font-size:0.85rem;overflow-x:auto;margin-top:15px;line-height:1.6;white-space:pre-wrap;">
+            </pre>
+        </div>
+    </div>
+
+    <div class="major-separator"></div>
+
+
+    <!-- ============================================================
+         ============================
+         SECTION 4: CSS GRID
+         ============================
+         ============================================================ -->
+    <div class="section" id="grid">
+        <h2 class="section-title">4. CSS Grid (2-Dimensional Layout)</h2>
+        <p class="section-desc">
+            Grid handles rows AND columns simultaneously. 
+            Use Grid for page layouts, card grids, and any 2D arrangement.
+        </p>
+
+        <!-- 4.1 grid-template-columns -->
+        <div class="subsection">
+            <h3>4.1 grid-template-columns — Define column widths</h3>
+            <div class="explanation">
+                <code>grid-template-columns: 200px 200px 200px</code> → 3 fixed columns<br>
+                <code>grid-template-columns: 1fr 1fr 1fr</code> → 3 equal flexible columns<br>
+                <code>grid-template-columns: 1fr 2fr 1fr</code> → middle is twice as wide<br>
+                <code>grid-template-columns: 250px 1fr</code> → fixed sidebar + flexible main<br>
+                <code>grid-template-columns: repeat(3, 1fr)</code> → shorthand for 1fr 1fr 1fr<br>
+                <code>grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))</code> → ✨ RESPONSIVE MAGIC!<br><br>
+                <strong>fr unit</strong> = "fraction" of available space. 1fr 2fr 1fr divides space into 4 parts: 
+                1 part, 2 parts, 1 part.
+            </div>
+
+            <div class="demo" id="gridColsDemo" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
+                <div class="item">1</div>
+                <div class="item">2</div>
+                <div class="item">3</div>
+                <div class="item">4</div>
+                <div class="item">5</div>
+                <div class="item">6</div>
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>grid-template-columns:</label>
+                    <select id="gridCols" style="min-width:280px;">
+                        <option value="1fr 1fr 1fr">1fr 1fr 1fr (3 equal)</option>
+                        <option value="1fr 2fr 1fr">1fr 2fr 1fr (center wider)</option>
+                        <option value="200px 1fr">200px 1fr (sidebar + main)</option>
+                        <option value="repeat(4, 1fr)">repeat(4, 1fr) — 4 equal</option>
+                        <option value="repeat(2, 1fr)">repeat(2, 1fr) — 2 equal</option>
+                        <option value="1fr">1fr — single column</option>
+                        <option value="repeat(auto-fit, minmax(150px, 1fr))">repeat(auto-fit, minmax(150px, 1fr)) — ✨ RESPONSIVE</option>
+                        <option value="100px 1fr 100px">100px 1fr 100px (holy grail)</option>
+                        <option value="repeat(3, 100px)">repeat(3, 100px) — 3 fixed</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4.2 grid-template-rows -->
+        <div class="subsection">
+            <h3>4.2 grid-template-rows — Define row heights</h3>
+            <div class="explanation">
+                <code>grid-template-rows: auto 1fr auto</code> → header auto, main fills, footer auto<br>
+                <code>grid-template-rows: 100px 200px</code> → fixed row heights<br>
+                <code>grid-auto-rows: 150px</code> → height for AUTO-created rows<br>
+                <code>grid-auto-rows: minmax(100px, auto)</code> → at least 100px, grows with content
+            </div>
+
+            <div class="demo" id="gridRowsDemo" style="display:grid; grid-template-columns:1fr 1fr; gap:10px; grid-auto-rows:auto;">
+                <div class="item">Short</div>
+                <div class="item">Short</div>
+                <div class="item" style="padding:30px;">Taller content here with more text to demonstrate how auto rows work with varying content heights.</div>
+                <div class="item">Short</div>
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>grid-auto-rows:</label>
+                    <select id="gridRows">
+                        <option value="auto">auto (fit content)</option>
+                        <option value="100px">100px (fixed)</option>
+                        <option value="150px">150px (fixed)</option>
+                        <option value="minmax(100px, auto)">minmax(100px, auto) (min 100px, grows)</option>
+                        <option value="1fr">1fr (equal heights)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4.3 Grid gap -->
+        <div class="subsection">
+            <h3>4.3 gap, row-gap, column-gap</h3>
+            <div class="explanation">
+                Same as Flexbox gap but works in BOTH dimensions:<br>
+                <code>gap: 20px</code> → 20px between all rows AND columns<br>
+                <code>row-gap: 20px</code> → only between rows<br>
+                <code>column-gap: 30px</code> → only between columns<br>
+                <code>gap: 10px 30px</code> → row-gap column-gap
+            </div>
+
+            <div class="demo" id="gridGapDemo" style="display:grid; grid-template-columns:repeat(3,1fr); gap:15px;">
+                <div class="item">1</div>
+                <div class="item">2</div>
+                <div class="item">3</div>
+                <div class="item">4</div>
+                <div class="item">5</div>
+                <div class="item">6</div>
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>row-gap:</label>
+                    <input type="range" id="gridRowGap" min="0" max="50" value="15">
+                    <span class="current-value" id="gridRowGapVal">15px</span>
+                </div>
+                <div class="control-group">
+                    <label>column-gap:</label>
+                    <input type="range" id="gridColGap" min="0" max="50" value="15">
+                    <span class="current-value" id="gridColGapVal">15px</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4.4 Alignment in Grid -->
+        <div class="subsection">
+            <h3>4.4 Grid Alignment — justify-items & align-items</h3>
+            <div class="explanation">
+                <code>justify-items</code> → horizontal alignment of items WITHIN their cell<br>
+                <code>align-items</code> → vertical alignment of items WITHIN their cell<br>
+                <code>place-items: center</code> → shorthand for both at once<br><br>
+                These control where items sit INSIDE their grid cells, not the grid itself.
+            </div>
+
+            <div class="demo" id="gridAlignDemo" style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; min-height:250px; justify-items:stretch; align-items:stretch;">
+                <div class="item">1</div>
+                <div class="item">2</div>
+                <div class="item">3</div>
+                <div class="item">4</div>
+                <div class="item">5</div>
+                <div class="item">6</div>
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>justify-items:</label>
+                    <select id="gridJustifyItems">
+                        <option value="stretch" selected>stretch (fill cell width)</option>
+                        <option value="start">start (left of cell)</option>
+                        <option value="center">center (middle of cell)</option>
+                        <option value="end">end (right of cell)</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>align-items:</label>
+                    <select id="gridAlignItems">
+                        <option value="stretch" selected>stretch (fill cell height)</option>
+                        <option value="start">start (top of cell)</option>
+                        <option value="center">center (middle of cell)</option>
+                        <option value="end">end (bottom of cell)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4.5 Spanning columns/rows -->
+        <div class="subsection">
+            <h3>4.5 grid-column & grid-row — Spanning multiple cells</h3>
+            <div class="explanation">
+                <code>grid-column: span 2</code> → item spans 2 columns<br>
+                <code>grid-column: 1 / 3</code> → start at line 1, end at line 3 (span 2 columns)<br>
+                <code>grid-column: 1 / -1</code> → span ALL columns (first to last line)<br>
+                <code>grid-row: span 2</code> → item spans 2 rows<br><br>
+                Grid lines are numbered starting at 1. A 3-column grid has lines 1, 2, 3, 4.
+            </div>
+
+            <div class="demo" id="spanDemo" style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; grid-auto-rows:80px;">
+                <div class="item" id="spanItem1">1 (normal)</div>
+                <div class="item" id="spanItem2" style="grid-column:span 2;">2 (span 2 cols)</div>
+                <div class="item" id="spanItem3">3</div>
+                <div class="item" id="spanItem4" style="grid-row:span 2;">4 (span 2 rows)</div>
+                <div class="item" id="spanItem5">5</div>
+                <div class="item" id="spanItem6">6</div>
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>Item 2 grid-column:</label>
+                    <select id="spanCol">
+                        <option value="span 1">span 1 (normal)</option>
+                        <option value="span 2" selected>span 2 (2 columns wide)</option>
+                        <option value="span 3">span 3 (full width)</option>
+                        <option value="1 / -1">1 / -1 (all columns)</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Item 4 grid-row:</label>
+                    <select id="spanRow">
+                        <option value="span 1">span 1 (normal)</option>
+                        <option value="span 2" selected>span 2 (2 rows tall)</option>
+                        <option value="span 3">span 3 (3 rows tall)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4.6 grid-template-areas -->
+        <div class="subsection">
+            <h3>4.6 grid-template-areas — Named Layout Regions</h3>
+            <div class="explanation">
+                Define your layout visually with named areas:<br>
+                <code>grid-template-areas:<br>
+                &nbsp;&nbsp;"header header header"<br>
+                &nbsp;&nbsp;"sidebar main main"<br>
+                &nbsp;&nbsp;"footer footer footer";</code><br><br>
+                Then assign elements: <code>.header { grid-area: header; }</code><br>
+                Use <code>"."</code> for empty cells. This is the most READABLE way to create layouts!
+            </div>
+
+            <div class="demo" id="areasDemo" style="display:grid; gap:10px; min-height:300px;
+                 grid-template-columns: 200px 1fr;
+                 grid-template-rows: 60px 1fr 50px;
+                 grid-template-areas: 'header header' 'sidebar main' 'footer footer';">
+                <div class="item" style="grid-area:header; background:#667eea;">Header</div>
+                <div class="item" style="grid-area:sidebar; background:#764ba2;">Sidebar</div>
+                <div class="item" style="grid-area:main; background:#e84393;">Main Content</div>
+                <div class="item" style="grid-area:footer; background:#00b894;">Footer</div>
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>Layout:</label>
+                    <select id="gridAreas" style="min-width:280px;">
+                        <option value="sidebar">Sidebar Layout</option>
+                        <option value="holy-grail">Holy Grail (3 columns)</option>
+                        <option value="no-sidebar">No Sidebar (full width)</option>
+                        <option value="dashboard">Dashboard (complex)</option>
+                    </select>
+                </div>
+            </div>
+
+            <pre id="areasCode" style="background:#1a1a2e;color:#a8d8ea;padding:15px;border-radius:8px;
+                 font-size:0.82rem;overflow-x:auto;margin-top:15px;line-height:1.5;white-space:pre-wrap;">
+            </pre>
+        </div>
+
+        <!-- 4.7 Grid Recipes -->
+        <div class="subsection">
+            <h3>4.7 Flexbox vs Grid — When to Use Which</h3>
+            <div class="explanation">
+                <strong>Use FLEXBOX when:</strong><br>
+                ✅ Navigation bars (items in a row)<br>
+                ✅ Centering content<br>
+                ✅ Items with VARYING sizes<br>
+                ✅ Single row OR column layouts<br>
+                ✅ Space distribution (space-between)<br><br>
+                <strong>Use GRID when:</strong><br>
+                ✅ Overall page structure (header, sidebar, main, footer)<br>
+                ✅ Card grids with EQUAL sizing<br>
+                ✅ Image galleries<br>
+                ✅ 2D layouts (need both rows AND columns)<br>
+                ✅ Complex layouts with overlapping<br><br>
+                <strong>You can NEST them:</strong> Grid for page layout → Flexbox inside each grid area for component layout.
+            </div>
+
+            <div class="demo" style="display:grid; grid-template-columns:1fr 1fr; gap:20px; min-height:200px;">
+                <!-- Flexbox inside Grid Cell 1 -->
+                <div style="background:#f0f4ff; padding:15px; border-radius:8px; border:2px solid #667eea;">
+                    <h4 style="text-align:center;color:#667eea;margin-bottom:10px;">Flexbox Inside Grid</h4>
+                    <div style="display:flex; justify-content:space-between; align-items:center; background:white; padding:10px; border-radius:6px;">
+                        <span style="font-weight:700; color:#667eea;">Logo</span>
+                        <div style="display:flex; gap:10px;">
+                            <span style="color:#666;">Home</span>
+                            <span style="color:#666;">About</span>
+                            <span style="color:#666;">Contact</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Grid description -->
+                <div style="background:#fff0f4; padding:15px; border-radius:8px; border:2px solid #e84393;">
+                    <h4 style="text-align:center;color:#e84393;margin-bottom:10px;">Grid = Page Layout</h4>
+                    <p style="font-size:0.85rem;color:#666;">
+                        This 2-column layout is created with Grid.
+                        The navbar inside the left column uses Flexbox.
+                        They work TOGETHER!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="major-separator"></div>
+
+
+    <!-- ============================================================
+         ============================
+         SECTION 5: POSITIONING
+         ============================
+         ============================================================ -->
+    <div class="section" id="position">
+        <h2 class="section-title">5. CSS Positioning</h2>
+        <p class="section-desc">
+            Controls WHERE an element is placed — static, relative, absolute, fixed, or sticky.
+        </p>
+
+        <!-- 5.1 Position Types -->
+        <div class="subsection">
+            <h3>5.1 Position Types — Visual Comparison</h3>
+            <div class="explanation">
+                <code>static</code> (default) → normal flow, top/left/right/bottom have NO effect<br>
+                <code>relative</code> → offsets from normal position, original space is KEPT<br>
+                <code>absolute</code> → removed from flow, positioned relative to nearest positioned ancestor<br>
+                <code>fixed</code> → removed from flow, positioned relative to VIEWPORT, stays on scroll<br>
+                <code>sticky</code> → normal until scroll point, then fixed until parent scrolls away
+            </div>
+
+            <div class="demo" id="positionDemo" style="height:300px; overflow:auto; position:relative;">
+                <!-- Static items for reference -->
+                <div style="background:#e0e0e0;padding:10px;margin-bottom:10px;border-radius:4px;color:#666;">
+                    Static element (normal flow)
+                </div>
+                <!-- The positioned element -->
+                <div class="item" id="positionedBox" style="position:relative; top:0; left:0;">
+                    Positioned Box
+                </div>
+                <div style="background:#e0e0e0;padding:10px;margin-top:10px;border-radius:4px;color:#666;">
+                    Another static element
+                </div>
+                <!-- Spacer for scrolling -->
+                <div style="height:300px;background:repeating-linear-gradient(0deg,transparent,transparent 30px,#f0f0f0 30px,#f0f0f0 31px);border-radius:6px;display:flex;align-items:center;justify-content:center;color:#999;">
+                    ↕ Scroll area (for sticky demo)
+                </div>
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>position:</label>
+                    <select id="positionType">
+                        <option value="static">static (default — no offset)</option>
+                        <option value="relative" selected>relative (offset from self)</option>
+                        <option value="absolute">absolute (relative to parent)</option>
+                        <option value="sticky">sticky (sticks on scroll)</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>top:</label>
+                    <input type="range" id="posTop" min="-50" max="100" value="0">
+                    <span class="current-value" id="posTopVal">0px</span>
+                </div>
+                <div class="control-group">
+                    <label>left:</label>
+                    <input type="range" id="posLeft" min="-50" max="200" value="0">
+                    <span class="current-value" id="posLeftVal">0px</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5.2 Common Patterns -->
+        <div class="subsection">
+            <h3>5.2 Common Position Patterns</h3>
+            <div class="explanation">
+                <strong>Pattern 1:</strong> <code>position: relative</code> on parent + 
+                <code>position: absolute</code> on child = text overlay on image<br>
+                <strong>Pattern 2:</strong> <code>position: fixed; top:0;</code> = navbar that stays at top<br>
+                <strong>Pattern 3:</strong> <code>position: absolute; top:-5px; right:-5px;</code> = notification badge on icon<br>
+                <strong>Pattern 4:</strong> <code>position: fixed; bottom:30px; right:30px;</code> = floating action button
+            </div>
+
+            <div class="demo" style="display:flex; gap:20px; flex-wrap:wrap; justify-content:center;">
+                <!-- Pattern: Text on Image -->
+                <div style="position:relative; width:200px; height:150px; border-radius:8px; overflow:hidden;">
+                    <div style="width:100%;height:100%;background:linear-gradient(135deg,#667eea,#764ba2);"></div>
+                    <div style="position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.6); color:white; padding:10px; font-size:0.85rem;">
+                        <strong>Text on Image</strong><br>
+                        <span style="font-size:0.75rem;opacity:0.8;">parent: relative, child: absolute</span>
+                    </div>
+                </div>
+
+                <!-- Pattern: Badge on Icon -->
+                <div style="position:relative; display:inline-block; padding:20px;">
+                    <div style="width:60px;height:60px;background:#667eea;border-radius:12px;display:flex;justify-content:center;align-items:center;font-size:1.5rem;">
+                        🔔
+                    </div>
+                    <div style="position:absolute;top:12px;right:12px;background:#e74c3c;color:white;width:22px;height:22px;border-radius:50%;display:flex;justify-content:center;align-items:center;font-size:0.7rem;font-weight:700;border:2px solid white;">
+                        3
+                    </div>
+                    <p style="text-align:center;font-size:0.75rem;margin-top:5px;color:#666;">Badge Pattern</p>
+                </div>
+
+                <!-- Pattern: Centered with translate -->
+                <div style="position:relative; width:200px; height:150px; background:#f0f4ff; border-radius:8px; border:2px solid #667eea;">
+                    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:#667eea; color:white; padding:10px 15px; border-radius:6px; font-size:0.8rem; white-space:nowrap;">
+                        Centered with translate
+                    </div>
+                    <p style="position:absolute;bottom:5px;left:50%;transform:translateX(-50%);font-size:0.7rem;color:#666;white-space:nowrap;">
+                        top:50% + left:50% + translate(-50%,-50%)
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="background:#1a1a2e;color:#aaa;text-align:center;padding:30px;margin-top:20px;">
+        <p>📦 Box Model, Flexbox & Grid — Complete Visual Reference</p>
+        <p style="font-size:0.85rem;margin-top:5px;opacity:0.7;">
+            Change every control above to see instant results. Open DevTools (F12) to inspect elements.
+        </p>
+    </div>
+
+
+    <!-- ============================================================
+         JAVASCRIPT — All Interactive Controls
+         ============================================================ -->
+    <script>
+        /*
+        ============================================================
+            JAVASCRIPT FOR INTERACTIVE DEMOS
+        ============================================================
+        
+        Every demo above has controls (dropdowns, sliders).
+        This JS reads the control values and applies them to the demo containers.
+        
+        Pattern used throughout:
+        1. Select the control element (querySelector / getElementById)
+        2. Add an event listener ('input' for sliders, 'change' for selects)
+        3. Read the value (e.target.value)
+        4. Apply it to the demo element (element.style.property = value)
+        5. Update the display label
+        */
+
+
+        // ============================================================
+        // 1. BOX MODEL INTERACTIVE DEMO
+        // ============================================================
+
+        const bmContent = document.getElementById('bmContent');
+        const bmPadding = document.getElementById('bmPadding');
+        const bmBorder = document.getElementById('bmBorder');
+        const bmMargin = document.getElementById('bmMargin');
+        const totalSizeDisplay = document.getElementById('totalSize');
+        const contentSizeDisplay = document.getElementById('contentSize');
+
+        /*
+            Helper function to recalculate and display total box size.
+            This demonstrates how the box model adds up:
+            
+            WITH content-box (default):
+              Total = content + padding*2 + border*2
+              (margin is OUTSIDE — not part of element's width)
+              
+            WITH border-box:
+              Total = width you set (padding & border are INSIDE)
+              Content area = width - padding*2 - border*2
+        */
+        function updateBoxModel() {
+            const w = parseInt(document.getElementById('contentWidth').value);
+            const h = parseInt(document.getElementById('contentHeight').value);
+            const p = parseInt(document.getElementById('bmPaddingVal').value);
+            const b = parseInt(document.getElementById('bmBorderVal').value);
+            const m = parseInt(document.getElementById('bmMarginVal').value);
+            const sizing = document.getElementById('boxSizing').value;
+
+            // Apply values to visual elements
+            bmContent.style.width = w + 'px';
+            bmContent.style.height = h + 'px';
+            bmPadding.style.padding = p + 'px';
+            bmBorder.style.borderWidth = b + 'px';
+            bmMargin.style.padding = m + 'px';
+            bmContent.style.boxSizing = sizing;
+
+            // Update display labels
+            document.getElementById('contentWidthVal').textContent = w + 'px';
+            document.getElementById('contentHeightVal').textContent = h + 'px';
+            document.getElementById('paddingDisplay').textContent = p + 'px';
+            document.getElementById('borderDisplay').textContent = b + 'px';
+            document.getElementById('marginDisplay').textContent = m + 'px';
+
+            // Calculate and show total size
+            let totalW, totalH, actualContentW, actualContentH;
+
+            if (sizing === 'content-box') {
+                /*
+                    content-box (default):
+                    You set content size = 200px
+                    Total = 200 + padding_left + padding_right + border_left + border_right
+                    Total = 200 + 25 + 25 + 5 + 5 = 260px
+                    
+                    This is CONFUSING because what you set ≠ what you get!
+                */
+                totalW = w + (p * 2) + (b * 2);
+                totalH = h + (p * 2) + (b * 2);
+                actualContentW = w;
+                actualContentH = h;
+                contentSizeDisplay.textContent = `${w} × ${h}`;
+                totalSizeDisplay.innerHTML = `
+                    <strong>content-box:</strong> 
+                    Content(${w}) + Padding(${p}×2) + Border(${b}×2) = 
+                    <strong style="color:#e84393;">${totalW} × ${totalH}px</strong> total rendered size
+                    <br><span style="color:#e17055;">⚠️ Element is BIGGER than the width you set!</span>
+                `;
+            } else {
+                /*
+                    border-box (recommended):
+                    You set width = 200px
+                    Total = 200px (exactly what you set!)
+                    Content area = 200 - padding_left - padding_right - border_left - border_right
+                    Content area = 200 - 25 - 25 - 5 - 5 = 140px
+                    
+                    This is INTUITIVE because what you set = what you get!
+                */
+                totalW = w;
+                totalH = h;
+                actualContentW = Math.max(0, w - (p * 2) - (b * 2));
+                actualContentH = Math.max(0, h - (p * 2) - (b * 2));
+                contentSizeDisplay.textContent = `${actualContentW} × ${actualContentH}`;
+                totalSizeDisplay.innerHTML = `
+                    <strong>border-box:</strong> 
+                    Total = <strong style="color:#00b894;">${totalW} × ${totalH}px</strong> (exactly what you set!)
+                    <br>Content area = ${totalW} - Padding(${p}×2) - Border(${b}×2) = ${actualContentW} × ${actualContentH}px
+                    <br><span style="color:#00b894;">✅ What you set is what you get!</span>
+                `;
+            }
+        }
+
+        // Attach event listeners to all box model controls
+        ['contentWidth', 'contentHeight', 'bmPaddingVal', 'bmBorderVal', 'bmMarginVal', 'boxSizing']
+            .forEach(id => {
+                document.getElementById(id).addEventListener('input', updateBoxModel);
+                document.getElementById(id).addEventListener('change', updateBoxModel);
+            });
+
+        updateBoxModel(); // initial render
+
+
+        // ============================================================
+        // 1.3 PADDING SHORTHAND DEMO
+        // ============================================================
+        document.getElementById('paddingShorthand').addEventListener('change', (e) => {
+            const box = document.getElementById('shorthandBox');
+            box.style.padding = e.target.value;
+            document.getElementById('shorthandValue').textContent = e.target.value;
+        });
+
+
+        // ============================================================
+        // 2. DISPLAY PROPERTY DEMO
+        // ============================================================
+        const displayBoxes = [
+            document.getElementById('displayBox1'),
+            document.getElementById('displayBox2'),
+            document.getElementById('displayBox3')
+        ];
+
+        document.getElementById('displaySelect').addEventListener('change', (e) => {
+            displayBoxes.forEach(box => {
+                box.style.display = e.target.value;
+                box.textContent = e.target.value;
+            });
+        });
+
+        document.getElementById('displayWidth').addEventListener('input', (e) => {
+            displayBoxes.forEach(box => {
+                box.style.width = e.target.value + 'px';
+            });
+            document.getElementById('displayWidthVal').textContent = e.target.value + 'px';
+        });
+
+
+        // ============================================================
+        // 3. FLEXBOX DEMOS
+        // ============================================================
+
+        // 3.1 flex-direction
+        document.getElementById('flexDirection').addEventListener('change', (e) => {
+            document.getElementById('directionDemo').style.flexDirection = e.target.value;
+        });
+
+        // 3.2 justify-content
+        document.getElementById('justifyContent').addEventListener('change', (e) => {
+            document.getElementById('justifyDemo').style.justifyContent = e.target.value;
+        });
+
+        // 3.3 align-items
+        document.getElementById('alignItems').addEventListener('change', (e) => {
+            document.getElementById('alignDemo').style.alignItems = e.target.value;
+        });
+
+        document.getElementById('alignHeight').addEventListener('input', (e) => {
+            document.getElementById('alignDemo').style.minHeight = e.target.value + 'px';
+            document.getElementById('alignHeightVal').textContent = e.target.value + 'px';
+        });
+
+        // 3.4 flex-wrap
+        document.getElementById('flexWrap').addEventListener('change', (e) => {
+            document.getElementById('wrapDemo').style.flexWrap = e.target.value;
+        });
+
+        // 3.5 gap
+        document.getElementById('gapValue').addEventListener('input', (e) => {
+            document.getElementById('gapDemo').style.gap = e.target.value + 'px';
+            document.getElementById('gapDisplay').textContent = e.target.value + 'px';
+        });
+
+        // 3.6 flex child properties
+        ['flex1', 'flex2', 'flex3'].forEach((id, index) => {
+            document.getElementById(id).addEventListener('change', (e) => {
+                const child = document.getElementById(`flexChild${index + 1}`);
+                child.style.flex = e.target.value;
+                child.textContent = `flex: ${e.target.value}`;
+            });
+        });
+
+
+        // ============================================================
+        // 3.7 FLEXBOX RECIPES
+        // ============================================================
+        
+        /*
+            Each recipe shows:
+            1. A visual demo of the layout
+            2. The exact CSS code to create it
+            
+            This is the kind of pattern recognition needed for visual implementation tests:
+            "I see a navbar with logo left and links right" → flex + space-between
+        */
+        const recipes = {
+            navbar: {
+                html: `
+                    <div style="display:flex; justify-content:space-between; align-items:center; background:#1a1a2e; padding:15px 20px; border-radius:8px;">
+                        <span style="color:white; font-weight:700; font-size:1.2rem;">🌐 Logo</span>
+                        <div style="display:flex; gap:20px;">
+                            <span style="color:#aaa;">Home</span>
+                            <span style="color:#aaa;">About</span>
+                            <span style="color:#aaa;">Contact</span>
+                        </div>
+                    </div>
+                `,
+                code: `.navbar {\n    display: flex;\n    justify-content: space-between;  /* logo left, links right */\n    align-items: center;             /* vertically center */\n    padding: 15px 20px;\n}`
+            },
+            center: {
+                html: `
+                    <div style="display:flex; justify-content:center; align-items:center; min-height:200px; background:linear-gradient(135deg,#667eea,#764ba2); border-radius:8px;">
+                        <div style="text-align:center; color:white;">
+                            <h3>Perfectly Centered</h3>
+                            <p style="opacity:0.8;">Both horizontally and vertically</p>
+                        </div>
+                    </div>
+                `,
+                code: `.center {\n    display: flex;\n    justify-content: center;  /* horizontal center */\n    align-items: center;      /* vertical center */\n    min-height: 100vh;        /* needs height to center within */\n}`
+            },
+            sidebar: {
+                html: `
+                    <div style="display:flex; gap:15px; min-height:180px;">
+                        <div style="flex:0 0 180px; background:#764ba2; color:white; padding:20px; border-radius:8px;">
+                            <strong>Sidebar</strong><br>
+                            <span style="font-size:0.8rem;">flex: 0 0 180px<br>(fixed width)</span>
+                        </div>
+                        <div style="flex:1; background:#667eea; color:white; padding:20px; border-radius:8px;">
+                            <strong>Main Content</strong><br>
+                            <span style="font-size:0.8rem;">flex: 1 (fills remaining space)</span>
+                        </div>
+                    </div>
+                `,
+                code: `.layout {\n    display: flex;\n    gap: 15px;\n}\n.sidebar {\n    flex: 0 0 250px;  /* don't grow, don't shrink, stay 250px */\n}\n.main {\n    flex: 1;          /* take ALL remaining space */\n}`
+            },
+            cards: {
+                html: `
+                    <div style="display:flex; flex-wrap:wrap; gap:15px;">
+                        <div style="flex:1 1 150px; background:#667eea; color:white; padding:20px; border-radius:8px; text-align:center;">Card 1</div>
+                        <div style="flex:1 1 150px; background:#764ba2; color:white; padding:20px; border-radius:8px; text-align:center;">Card 2</div>
+                        <div style="flex:1 1 150px; background:#e84393; color:white; padding:20px; border-radius:8px; text-align:center;">Card 3</div>
+                        <div style="flex:1 1 150px; background:#00b894; color:white; padding:20px; border-radius:8px; text-align:center;">Card 4</div>
+                    </div>
+                `,
+                code: `.cards {\n    display: flex;\n    flex-wrap: wrap;       /* allow wrapping */\n    gap: 15px;\n}\n.card {\n    flex: 1 1 250px;       /* grow, shrink, min 250px */\n    /* Cards auto-wrap when they can't fit */\n}`
+            },
+            footer: {
+                html: `
+                    <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:25px; background:#1a1a2e; padding:25px; border-radius:8px; color:#aaa;">
+                        <div style="flex:1 1 150px;"><strong style="color:white;">About</strong><br><span style="font-size:0.85rem;">Company info here</span></div>
+                        <div style="flex:1 1 150px;"><strong style="color:white;">Links</strong><br><span style="font-size:0.85rem;">Home • About • FAQ</span></div>
+                        <div style="flex:1 1 150px;"><strong style="color:white;">Contact</strong><br><span style="font-size:0.85rem;">hello@email.com</span></div>
+                        <div style="flex:1 1 150px;"><strong style="color:white;">Social</strong><br><span style="font-size:0.85rem;">FB • TW • IG</span></div>
+                    </div>
+                `,
+                code: `.footer {\n    display: flex;\n    justify-content: space-between;\n    flex-wrap: wrap;\n    gap: 30px;\n}\n.footer-section {\n    flex: 1 1 200px;  /* equal, wrap on small screens */\n}`
+            },
+            'input-btn': {
+                html: `
+                    <div style="display:flex; gap:0; max-width:400px; margin:0 auto;">
+                        <input type="text" placeholder="Search..." style="flex:1; padding:12px 15px; border:2px solid #667eea; border-right:none; border-radius:8px 0 0 8px; font-size:1rem; outline:none;">
+                        <button style="flex:0 0 auto; padding:12px 20px; background:#667eea; color:white; border:2px solid #667eea; border-radius:0 8px 8px 0; font-size:1rem; cursor:pointer; font-weight:600;">Search</button>
+                    </div>
+                `,
+                code: `.search-bar {\n    display: flex;\n}\n.search-bar input {\n    flex: 1;           /* input fills available space */\n}\n.search-bar button {\n    flex: 0 0 auto;    /* button only as wide as text */\n}`
+            },
+            'vertical-center': {
+                html: `
+                    <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; min-height:200px; background:linear-gradient(135deg,#00b894,#00cec9); border-radius:8px; color:white; text-align:center;">
+                        <h3>Centered Content</h3>
+                        <p style="opacity:0.8; max-width:300px;">flex-direction: column + justify-content: center + align-items: center</p>
+                        <button style="margin-top:15px; padding:10px 25px; background:white; color:#00b894; border:none; border-radius:6px; font-weight:600; cursor:pointer;">Button</button>
+                    </div>
+                `,
+                code: `.hero {\n    display: flex;\n    flex-direction: column;    /* stack vertically */\n    justify-content: center;   /* center vertically */\n    align-items: center;       /* center horizontally */\n    text-align: center;\n    min-height: 100vh;\n}`
+            }
+        };
+
+        const recipeSelect = document.getElementById('flexRecipe');
+        const recipeDemo = document.getElementById('recipeDemo');
+        const recipeCode = document.getElementById('recipeCode');
+
+        function showRecipe() {
+            const recipe = recipes[recipeSelect.value];
+            recipeDemo.innerHTML = recipe.html;
+            recipeCode.textContent = recipe.code;
+        }
+
+        recipeSelect.addEventListener('change', showRecipe);
+        showRecipe(); // initial
+
+
+        // ============================================================
+        // 4. GRID DEMOS
+        // ============================================================
+
+        // 4.1 grid-template-columns
+        document.getElementById('gridCols').addEventListener('change', (e) => {
+            document.getElementById('gridColsDemo').style.gridTemplateColumns = e.target.value;
+        });
+
+        // 4.2 grid-auto-rows
+        document.getElementById('gridRows').addEventListener('change', (e) => {
+            document.getElementById('gridRowsDemo').style.gridAutoRows = e.target.value;
+        });
+
+        // 4.3 grid gap
+        document.getElementById('gridRowGap').addEventListener('input', (e) => {
+            document.getElementById('gridGapDemo').style.rowGap = e.target.value + 'px';
+            document.getElementById('gridRowGapVal').textContent = e.target.value + 'px';
+        });
+
+        document.getElementById('gridColGap').addEventListener('input', (e) => {
+            document.getElementById('gridGapDemo').style.columnGap = e.target.value + 'px';
+            document.getElementById('gridColGapVal').textContent = e.target.value + 'px';
+        });
+
+        // 4.4 Grid alignment
+        document.getElementById('gridJustifyItems').addEventListener('change', (e) => {
+            document.getElementById('gridAlignDemo').style.justifyItems = e.target.value;
+        });
+
+        document.getElementById('gridAlignItems').addEventListener('change', (e) => {
+            document.getElementById('gridAlignDemo').style.alignItems = e.target.value;
+        });
+
+        // 4.5 Grid spanning
+        document.getElementById('spanCol').addEventListener('change', (e) => {
+            document.getElementById('spanItem2').style.gridColumn = e.target.value;
+        });
+
+        document.getElementById('spanRow').addEventListener('change', (e) => {
+            document.getElementById('spanItem4').style.gridRow = e.target.value;
+        });
+
+
+        // ============================================================
+        // 4.6 GRID TEMPLATE AREAS
+        // ============================================================
+
+        const areaLayouts = {
+            sidebar: {
+                columns: '200px 1fr',
+                rows: '60px 1fr 50px',
+                areas: `'header header' 'sidebar main' 'footer footer'`,
+                code: `grid-template-columns: 200px 1fr;\ngrid-template-rows: 60px 1fr 50px;\ngrid-template-areas:\n  "header  header"\n  "sidebar main"\n  "footer  footer";`
+            },
+            'holy-grail': {
+                columns: '150px 1fr 150px',
+                rows: '60px 1fr 50px',
+                areas: `'header header header' 'left main right' 'footer footer footer'`,
+                code: `grid-template-columns: 150px 1fr 150px;\ngrid-template-rows: 60px 1fr 50px;\ngrid-template-areas:\n  "header header header"\n  "left   main   right"\n  "footer footer footer";`,
+                extraItems: true
+            },
+            'no-sidebar': {
+                columns: '1fr',
+                rows: '60px 1fr 50px',
+                areas: `'header' 'main' 'footer'`,
+                code: `grid-template-columns: 1fr;\ngrid-template-rows: 60px 1fr 50px;\ngrid-template-areas:\n  "header"\n  "main"\n  "footer";`
+            },
+            'dashboard': {
+                columns: '180px 1fr 1fr',
+                rows: '50px 1fr 1fr',
+                areas: `'header header header' 'sidebar main stats' 'sidebar chart chart'`,
+                code: `grid-template-columns: 180px 1fr 1fr;\ngrid-template-rows: 50px 1fr 1fr;\ngrid-template-areas:\n  "header  header header"\n  "sidebar main   stats"\n  "sidebar chart  chart";`,
+                extraItems: true
+            }
+        };
+
+        document.getElementById('gridAreas').addEventListener('change', (e) => {
+            const layout = areaLayouts[e.target.value];
+            const demo = document.getElementById('areasDemo');
+
+            demo.style.gridTemplateColumns = layout.columns;
+            demo.style.gridTemplateRows = layout.rows;
+            demo.style.gridTemplateAreas = layout.areas;
+
+            // Rebuild items based on layout
+            const areaNames = layout.areas.replace(/'/g, '').split(/\s+/).filter((v, i, a) => a.indexOf(v) === i);
+            const colors = { header: '#667eea', sidebar: '#764ba2', main: '#e84393', footer: '#00b894', left: '#fdcb6e', right: '#e17055', stats: '#74b9ff', chart: '#a29bfe' };
+
+            demo.innerHTML = '';
+            areaNames.forEach(area => {
+                const div = document.createElement('div');
+                div.className = 'item';
+                div.style.gridArea = area;
+                div.style.background = colors[area] || '#667eea';
+                div.style.color = area === 'left' ? '#333' : 'white';
+                div.textContent = area.charAt(0).toUpperCase() + area.slice(1);
+                demo.appendChild(div);
+            });
+
+            document.getElementById('areasCode').textContent = layout.code;
+        });
+
+        // Initial areas code
+        document.getElementById('areasCode').textContent = areaLayouts.sidebar.code;
+
+
+        // ============================================================
+        // 5. POSITIONING DEMO
+        // ============================================================
+
+        const positionedBox = document.getElementById('positionedBox');
+
+        document.getElementById('positionType').addEventListener('change', (e) => {
+            positionedBox.style.position = e.target.value;
+            
+            // Reset offsets for clean demo
+            if (e.target.value === 'static') {
+                positionedBox.style.top = 'auto';
+                positionedBox.style.left = 'auto';
+            } else if (e.target.value === 'sticky') {
+                positionedBox.style.top = '0px';
+                positionedBox.style.left = 'auto';
+                document.getElementById('posTop').value = 0;
+                document.getElementById('posTopVal').textContent = '0px';
+            }
+        });
+
+        document.getElementById('posTop').addEventListener('input', (e) => {
+            positionedBox.style.top = e.target.value + 'px';
+            document.getElementById('posTopVal').textContent = e.target.value + 'px';
+        });
+
+        document.getElementById('posLeft').addEventListener('input', (e) => {
+            positionedBox.style.left = e.target.value + 'px';
+            document.getElementById('posLeftVal').textContent = e.target.value + 'px';
+        });
+
+
+        // ============================================================
+        // SMOOTH SCROLL FOR NAV LINKS
+        // ============================================================
+        document.querySelectorAll('.main-nav a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // ============================================================
+        // Log confirmation
+        // ============================================================
+        console.log('%c📦 Box Model, Flexbox & Grid Reference Loaded!', 
+            'color: #667eea; font-size: 16px; font-weight: bold;');
+        console.log('Change any control to see instant results.');
+
+    </script>
+</body>
+</html>

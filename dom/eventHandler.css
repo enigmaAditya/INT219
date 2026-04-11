@@ -1,0 +1,7 @@
+.box{
+    border:solid 10px rgb(137, 75, 4);
+    width:200px;
+    height:200px;
+    border-radius: 5px;
+    border-style:groove;
+}

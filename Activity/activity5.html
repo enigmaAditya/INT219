@@ -1,0 +1,112 @@
+<!-- develop a dynamic to-do list web app using js that demonstrate theconcepts of event delegation and event propagation(bubbling). The app should allow users to add new tasksdynamically to the list, and delete tasks. Use event delegation to handle click events on the task list, and demonstrate event propagation by allowing users to click on a task to delete it. 
+ create a formwith atext input fiels anda submitbutton-->
+
+ 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic To-Do List</title>
+</head>
+<body>
+    <style>
+        #tasklist{
+            overflow:auto;
+            height:400px;
+            width:400px;
+            margin:15px;
+            padding:10px;
+            color:burlywood;
+            background-color: blanchedalmond;
+            border:10px solid violet;
+            box-sizing:border-box;
+            align-items:center;
+            display:flex;
+            flex-direction:column;
+        }
+        .task{
+            height:50px;
+            width:100%;
+            margin:5px 0;
+            padding:10px;
+            color:blueviolet;
+            background-color: orange;
+            border:10px solid violet;
+            box-sizing:border-box;
+            display:flex;
+            justify-content: space-between;
+        }
+        .deletebtn{
+            padding:5px 10px;
+            
+            cursor:pointer;
+        }
+        .likebtn{
+            padding:5px 10px;
+            background-color: lightblue;
+            border: 2px solid blue;
+            cursor:pointer;
+        }
+    </style>
+
+    <div id="tasklist">
+        <input type="text" id="newtask" placeholder="Add a new task">
+        <button id="addbtn">Add Task</button>
+
+
+    </div>
+    
+
+    <script>
+        const taskList = document.getElementById('tasklist');
+        const addBtn = document.getElementById('addbtn');
+        const newTaskInput = document.getElementById('newtask');
+        //where is the bubbling part? when we click on delete button the event will bubble up to the task item and then to the task list. we can demonstrate this by adding an event listener to the task item and logging the event target.
+        taskList.addEventListener('click', (e) => {
+            console.log('Task List Clicked:', e.target);
+        });
+
+        // // Event delegation for adding tasks
+        // addBtn.addEventListener('click', () => {
+        //     const taskText = newTaskInput.value.trim();
+        //     if (taskText) {
+        //         const taskItem = document.createElement('div');
+        //         taskItem.className = 'task';
+        //         taskItem.innerHTML = `${taskText} <button class="deletebtn">Delete</button>`;
+        //         taskList.appendChild(taskItem);
+        //         newTaskInput.value = '';
+        //     }
+        // });
+        //create a like button for each task item
+         addBtn.addEventListener('click', () => {
+            const taskText = newTaskInput.value.trim();
+            if (taskText) {
+                const taskItem = document.createElement('div');
+                taskItem.className = 'task';
+                taskItem.innerHTML = `${taskText} <button class="likebtn">Like</button> <button class="deletebtn">Delete</button>`;
+                taskList.appendChild(taskItem);
+                newTaskInput.value = '';
+            }
+        });
+
+        //eventdelegation for like button
+        taskList.addEventListener('click', (e) => {
+            if (e.target.classList.contains('likebtn')) {
+                e.target.textContent = 'Liked';
+                e.target.style.backgroundColor = 'lightgreen';
+                e.appendChild(e.target); // Move the like button to the end of the task item
+            }
+        });
+
+        // Event delegation for deleting tasks
+        taskList.addEventListener('click', (e) => {
+            if (e.target.classList.contains('deletebtn')) {
+                e.target.parentElement.remove();
+            }
+        });
+        //event delegt
+    </script>
+    
+</body>
+</html>

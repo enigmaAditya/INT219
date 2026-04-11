@@ -1,0 +1,1878 @@
+/*
+============================================================
+    CSS3 COMPLETE REFERENCE FILE
+    Every concept from Unit I demonstrated
+============================================================
+
+TABLE OF CONTENTS:
+1.  CSS Variables (Custom Properties)
+2.  CSS Reset
+3.  Base / Typography
+4.  Reusable Components (Buttons, Section Headers)
+5.  Navbar (Flexbox, Position Fixed)
+6.  Hero Section (Flexbox Centering, Gradient)
+7.  Services (CSS Grid)
+8.  About (Flexbox, Article + Aside)
+9.  Stats (Flexbox)
+10. Portfolio (Grid, Hover Overlay, Position)
+11. Tabs (Display None/Block)
+12. Accordion (Max-Height Transition)
+13. Contact Form (Form Styling, Validation States)
+14. Multimedia (Responsive Media)
+15. Interactive Components
+16. Modal (Position Fixed, Overlay)
+17. Footer (Grid)
+18. Back to Top (Position Fixed)
+19. Scroll Progress Bar
+20. Dark Mode (CSS Variables Override)
+21. Animations (@keyframes)
+22. Responsive Design (@media queries)
+============================================================
+*/
+
+
+/* ============================================================
+   1. CSS VARIABLES (Custom Properties)
+   ============================================================
+   WHAT: Reusable values defined once, used everywhere.
+   WHY:  Change one variable → updates ALL places that use it.
+         Perfect for theming (dark mode), consistency, and maintainability.
+   SYNTAX: --variable-name: value;
+   USAGE:  property: var(--variable-name);
+   
+   :root selector = the <html> element = highest level
+   Variables defined here are GLOBAL (accessible everywhere).
+*/
+:root {
+    /* ── Primary Colors ── */
+    --primary: #007bff;             /* main brand color */
+    --primary-dark: #0056b3;        /* darker shade for hover states */
+    --primary-light: #e3f2fd;       /* very light shade for backgrounds */
+
+    /* ── Semantic Colors ── */
+    --success: #28a745;             /* green — success messages, valid inputs */
+    --danger: #dc3545;              /* red — errors, delete buttons */
+    --warning: #ffc107;             /* yellow — warnings, caution */
+    --info: #17a2b8;                /* cyan — informational */
+
+    /* ── Neutral Colors ── */
+    --text-primary: #333333;        /* main body text color */
+    --text-secondary: #666666;      /* secondary/muted text */
+    --text-light: #999999;          /* placeholder text, captions */
+    --bg-body: #ffffff;             /* page background */
+    --bg-section: #f8f9fa;          /* alternate section background */
+    --bg-card: #ffffff;             /* card background */
+    --border-color: #dddddd;        /* borders, dividers */
+    --border-light: #eeeeee;        /* subtle borders */
+
+    /* ── Typography ── */
+    --font-primary: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-code: 'Courier New', Consolas, monospace;
+
+    /* ── Spacing (consistent spacing scale) ── */
+    --space-xs: 5px;
+    --space-sm: 10px;
+    --space-md: 20px;
+    --space-lg: 40px;
+    --space-xl: 80px;
+    --space-section: 80px 5%;       /* section padding: vertical horizontal */
+
+    /* ── Borders ── */
+    --radius-sm: 4px;               /* subtle rounding */
+    --radius-md: 8px;               /* standard rounding */
+    --radius-lg: 15px;              /* large rounding */
+    --radius-full: 50%;             /* perfect circle */
+    --radius-pill: 50px;            /* pill shape */
+
+    /* ── Shadows ── */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.15);
+    --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.2);
+
+    /* ── Transitions ── */
+    --transition-fast: all 0.2s ease;
+    --transition: all 0.3s ease;
+    --transition-slow: all 0.5s ease;
+
+    /* ── Layout ── */
+    --max-width: 1200px;            /* maximum content width */
+    --navbar-height: 70px;          /* fixed navbar height */
+}
+
+
+/* ============================================================
+   2. CSS RESET
+   ============================================================
+   WHY: Different browsers have different default styles.
+        Firefox, Chrome, Safari each have their own margins, paddings, fonts.
+        Reset ensures CONSISTENT starting point across all browsers.
+*/
+
+/* 
+   Universal selector (*) targets EVERY element.
+   *::before and *::after target pseudo-elements too.
+   
+   margin: 0    → remove default margins (browsers add margins to h1, p, body, etc.)
+   padding: 0   → remove default padding (browsers add padding to ul, ol, etc.)
+   box-sizing: border-box → width/height INCLUDE padding and border
+       Without border-box: width: 300px + padding: 20px = 340px total (confusing!)
+       With border-box:    width: 300px total including padding (intuitive!)
+*/
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/*
+   scroll-behavior: smooth → clicking anchor links (#section) scrolls smoothly
+   instead of jumping instantly. Only affects programmatic/anchor scrolling.
+*/
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;                /* base for rem units: 1rem = 16px */
+}
+
+/*
+   Body base styles — inherited by all children.
+   font-family, color, line-height are INHERITED properties.
+*/
+body {
+    font-family: var(--font-primary);
+    line-height: 1.6;              /* 1.6× the font size — good readability */
+    color: var(--text-primary);
+    background-color: var(--bg-body);
+    min-height: 100vh;             /* at least full viewport height */
+    /* Transition for dark mode background change */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/*
+   Remove default link underlines and use parent's color.
+   Links will be styled individually where needed.
+*/
+a {
+    text-decoration: none;         /* remove underline */
+    color: inherit;                /* use parent's text color */
+}
+
+/* Remove list bullets and numbers */
+ul, ol {
+    list-style: none;
+}
+
+/* 
+   Responsive images by default.
+   max-width: 100% → image never wider than its container.
+   height: auto → maintain aspect ratio (no stretching).
+   display: block → removes mysterious 4px gap below images
+       (images are inline by default, and inline elements have text baseline gap).
+*/
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* 
+   Buttons should show pointer cursor and inherit font.
+   By default, buttons don't inherit body's font-family.
+*/
+button {
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+/* Form elements should also inherit font */
+input, textarea, select {
+    font-family: inherit;
+    font-size: inherit;
+}
+
+
+/* ============================================================
+   3. BASE TYPOGRAPHY
+   ============================================================
+   Heading hierarchy: h1 > h2 > h3 > h4 > h5 > h6
+   Each level should be visually distinct.
+*/
+h1 { font-size: 2.5rem; font-weight: 800; line-height: 1.2; }
+h2 { font-size: 2rem; font-weight: 700; line-height: 1.3; }
+h3 { font-size: 1.5rem; font-weight: 600; line-height: 1.4; }
+h4 { font-size: 1.25rem; font-weight: 600; }
+h5 { font-size: 1rem; font-weight: 600; }
+h6 { font-size: 0.875rem; font-weight: 600; }
+
+p { margin-bottom: var(--space-sm); }
+
+/* <code> tag — for inline code snippets */
+code {
+    font-family: var(--font-code);
+    background: var(--primary-light);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    font-size: 0.9em;
+    color: var(--primary-dark);
+}
+
+/* <mark> tag — highlighted text */
+mark {
+    background: #fff3cd;
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+}
+
+
+/* ============================================================
+   4. REUSABLE COMPONENTS
+   ============================================================
+*/
+
+/* ── Section Header (centered title + subtitle) ── */
+.section-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.section-title {
+    color: var(--text-primary);
+    margin-bottom: var(--space-sm);
+    /* position: relative for the decorative underline */
+    position: relative;
+    display: inline-block;
+}
+
+/* 
+   Decorative underline using ::after pseudo-element.
+   ::after creates a virtual element AFTER the content.
+   content: '' is REQUIRED (even if empty).
+*/
+.section-title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--primary);
+    margin: 10px auto 0;
+    border-radius: 2px;
+}
+
+.section-subtitle {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;            /* center the constrained text block */
+}
+
+/* ── Buttons ── */
+.btn {
+    display: inline-block;     /* inline-block: sits in line but accepts width/height */
+    padding: 12px 30px;
+    border: 2px solid transparent;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+/* Solid primary button */
+.btn-primary {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+/* 
+   :hover pseudo-class — styles when mouse is OVER the element.
+   transform: translateY(-2px) — moves element UP 2px (lift effect).
+   box-shadow — adds depth shadow for "floating" appearance.
+*/
+.btn-primary:hover {
+    background: var(--primary-dark);
+    border-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+}
+
+/* Outline button (transparent with border) */
+.btn-outline {
+    background: transparent;
+    color: white;
+    border-color: white;
+}
+
+.btn-outline:hover {
+    background: white;
+    color: var(--primary);
+}
+
+/* Secondary button (gray) */
+.btn-secondary {
+    background: var(--bg-section);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+.btn-secondary:hover {
+    background: var(--border-color);
+}
+
+/* 
+   :active pseudo-class — styles when element is being CLICKED.
+   scale(0.95) — slightly shrinks for "press" feedback.
+*/
+.btn:active {
+    transform: scale(0.95);
+}
+
+
+/* ============================================================
+   5. NAVBAR
+   ============================================================
+   Uses: Flexbox, Position Fixed, Z-index, Transitions
+*/
+.navbar {
+    /*
+       display: flex — activates Flexbox layout.
+       Children (logo, nav-links, buttons) become flex items in a row.
+    */
+    display: flex;
+
+    /*
+       justify-content: space-between — pushes first child to left edge,
+       last child to right edge, equal space between all children.
+       Perfect for: logo (left) ... links (right)
+    */
+    justify-content: space-between;
+
+    /*
+       align-items: center — vertically centers all children
+       in the cross axis (vertical when flex-direction is row).
+       Without this, items would stretch to fill navbar height.
+    */
+    align-items: center;
+
+    padding: 0 5%;
+    height: var(--navbar-height);
+    background: var(--bg-body);
+
+    /*
+       position: fixed — element is positioned relative to the VIEWPORT.
+       It STAYS in place when user scrolls.
+       top: 0, left: 0 — anchored to top-left corner.
+       width: 100% — spans full viewport width.
+    */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    /*
+       z-index — stacking order. Higher = on top of lower.
+       1000 ensures navbar is ABOVE all other content.
+       Only works on positioned elements (not static).
+    */
+    z-index: 1000;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+/* 
+   Navbar visual change after scrolling — added by JavaScript.
+   When user scrolls down, JS adds class 'scrolled' to navbar.
+*/
+.navbar.scrolled {
+    box-shadow: var(--shadow-md);
+    background: rgba(255, 255, 255, 0.98);
+}
+
+/* Logo styling */
+.logo {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.logo span {
+    color: var(--primary);     /* "Hub" in different color */
+}
+
+/* Nav links container — Flexbox row */
+.nav-links {
+    display: flex;
+    gap: 30px;                 /* space between each link */
+}
+
+/* Individual nav links */
+.nav-links a {
+    font-weight: 500;
+    color: var(--text-secondary);
+    position: relative;        /* needed for ::after positioning */
+    padding: 5px 0;
+    transition: color 0.3s;
+}
+
+/* 
+   Growing underline effect using ::after pseudo-element.
+   Starts with width: 0 (invisible).
+   On hover, width grows to 100%.
+   transition: width 0.3s → smooth animation.
+*/
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--primary);
+    transition: width 0.3s ease;
+}
+
+/* 
+   :hover → mouse over 
+   .active → currently active link (set in HTML or JS)
+*/
+.nav-links a:hover::after,
+.nav-links a.active::after {
+    width: 100%;               /* underline grows to full width */
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--primary);
+}
+
+/* Dark mode toggle button */
+.dark-toggle {
+    background: none;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-full);
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+    transition: var(--transition);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dark-toggle:hover {
+    background: var(--bg-section);
+    transform: rotate(20deg);
+}
+
+/* 
+   Hamburger menu button — hidden on desktop.
+   display: none hides it completely from layout.
+*/
+.hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    padding: 5px;
+}
+
+.hamburger span {
+    width: 25px;
+    height: 3px;
+    background: var(--text-primary);
+    border-radius: 2px;
+    transition: var(--transition);
+}
+
+/* 
+   Offset body content so it's not hidden behind fixed navbar.
+   Since navbar is position:fixed, it's removed from normal flow.
+   Content would start at top of page (behind navbar) without this.
+*/
+body {
+    padding-top: var(--navbar-height);
+}
+
+
+/* ============================================================
+   6. HERO SECTION
+   ============================================================
+   Uses: Flexbox Centering, Linear Gradient, vh units
+*/
+.hero {
+    /*
+       min-height: 100vh — at least full viewport height.
+       100vh = 100% of the browser window height.
+       min-height (not height) allows content to grow if needed.
+    */
+    min-height: 100vh;
+
+    /* Flexbox centering — THE standard way to center content */
+    display: flex;
+    justify-content: center;       /* center horizontally (main axis) */
+    align-items: center;           /* center vertically (cross axis) */
+
+    text-align: center;
+
+    /*
+       Linear gradient background.
+       SYNTAX: linear-gradient(direction, color1, color2, ...)
+       135deg → diagonal from top-left to bottom-right.
+       WHY: more visually interesting than solid colors.
+    */
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 0 var(--space-md);
+}
+
+.hero-content {
+    max-width: 700px;              /* constrain text width for readability */
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: var(--space-md);
+    /*
+       Animation — slides in from below and fades in.
+       Defined in @keyframes section below.
+    */
+    animation: slideUp 0.8s ease forwards;
+}
+
+.hero p {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-lg);
+    opacity: 0.9;
+    animation: slideUp 0.8s ease 0.2s forwards;  /* 0.2s delay */
+    opacity: 0;                    /* start invisible, animation brings it in */
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;               /* wrap on small screens */
+    animation: slideUp 0.8s ease 0.4s forwards;
+    opacity: 0;
+}
+
+
+/* ============================================================
+   7. SERVICES — CSS Grid Card Layout
+   ============================================================
+   Uses: CSS Grid, Card Hover Effects, Transitions
+*/
+.services {
+    padding: var(--space-section);
+    background: var(--bg-section);
+}
+
+.services-grid {
+    /*
+       display: grid — activates CSS Grid layout.
+       
+       repeat(auto-fit, minmax(250px, 1fr)):
+       - auto-fit → create as many columns as will fit
+       - minmax(250px, 1fr) → each column minimum 250px, maximum 1fr
+       - This is RESPONSIVE WITHOUT media queries!
+       
+       On 1200px screen → 4 columns
+       On 800px screen  → 3 columns
+       On 500px screen  → 2 columns
+       On 300px screen  → 1 column
+    */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    max-width: var(--max-width);
+    margin: 0 auto;
+}
+
+.service-card {
+    background: var(--bg-card);
+    padding: var(--space-lg) var(--space-md);
+    border-radius: var(--radius-lg);
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    /*
+       transition on NORMAL state — animates BOTH hover-in and hover-out.
+       If placed on :hover, it only animates hover-in.
+    */
+    transition: var(--transition);
+}
+
+/*
+   Card hover effect:
+   translateY(-10px) → moves card UP 10px (lift effect).
+   Combined with larger shadow → creates "floating" illusion.
+*/
+.service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-lg);
+}
+
+.service-icon {
+    font-size: 3rem;
+    margin-bottom: var(--space-md);
+}
+
+.service-card h3 {
+    margin-bottom: var(--space-sm);
+    color: var(--text-primary);
+}
+
+.service-card p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+
+/* ============================================================
+   8. ABOUT SECTION — Article + Aside (Flexbox)
+   ============================================================
+*/
+.about {
+    padding: var(--space-section);
+}
+
+.about-container {
+    display: flex;
+    gap: 40px;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    align-items: flex-start;       /* align items to top, not stretch */
+}
+
+.about-content {
+    flex: 2;                       /* takes 2/3 of the space */
+}
+
+.about-content h3 {
+    margin-bottom: var(--space-md);
+    color: var(--primary);
+}
+
+.about-content p {
+    margin-bottom: var(--space-md);
+    line-height: 1.8;
+}
+
+.about-image {
+    width: 100%;
+    border-radius: var(--radius-md);
+    margin: var(--space-md) 0;
+}
+
+/* <figcaption> styling */
+figcaption {
+    text-align: center;
+    color: var(--text-light);
+    font-size: 0.875rem;
+    font-style: italic;
+    margin-top: var(--space-xs);
+}
+
+.about-sidebar {
+    flex: 1;                       /* takes 1/3 of the space */
+    background: var(--bg-section);
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    position: sticky;              /* sticks when scrolling */
+    top: calc(var(--navbar-height) + 20px);
+}
+
+.about-sidebar h4 {
+    margin-bottom: var(--space-md);
+    color: var(--primary);
+}
+
+.fact-list li {
+    padding: var(--space-sm) 0;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.fact-list li:last-child {
+    border-bottom: none;
+}
+
+/* <details> and <summary> styling */
+details {
+    margin-top: var(--space-md);
+    padding: var(--space-sm);
+    background: white;
+    border-radius: var(--radius-md);
+}
+
+summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--primary);
+    padding: var(--space-sm);
+}
+
+details p {
+    padding: var(--space-sm);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+
+/* ============================================================
+   9. STATS SECTION
+   ============================================================
+*/
+.stats {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding: 60px 5%;
+    background: var(--primary);
+    color: white;
+}
+
+.stat {
+    text-align: center;
+    padding: var(--space-md);
+    min-width: 150px;
+}
+
+.stat h3 {
+    font-size: 2.5rem;
+    font-weight: 800;
+}
+
+.stat p {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+
+/* ============================================================
+   10. PORTFOLIO — Grid with Hover Overlay
+   ============================================================
+   Uses: CSS Grid, Position Relative/Absolute, Overflow Hidden, Transform
+*/
+.portfolio {
+    padding: var(--space-section);
+    background: var(--bg-section);
+}
+
+/* Filter Buttons */
+.filter-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: var(--space-lg);
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 8px 24px;
+    border: 2px solid var(--primary);
+    background: transparent;
+    color: var(--primary);
+    border-radius: var(--radius-pill);
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+.filter-btn.active,
+.filter-btn:hover {
+    background: var(--primary);
+    color: white;
+}
+
+/* Portfolio Grid */
+.portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    max-width: var(--max-width);
+    margin: 0 auto;
+}
+
+.portfolio-item {
+    /*
+       position: relative — makes this the reference point
+       for the absolutely positioned overlay child.
+    */
+    position: relative;
+    border-radius: var(--radius-md);
+    /*
+       overflow: hidden — clips content that goes outside the border.
+       WHY: 
+       1. Image respects border-radius (without it, image corners are square)
+       2. Zoomed image on hover doesn't spill outside
+       3. Overlay sliding animation stays within bounds
+    */
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.portfolio-item img {
+    width: 100%;
+    height: 250px;
+    /*
+       object-fit: cover — image fills the container completely.
+       May crop edges, but maintains aspect ratio (no distortion).
+       Without it: image might be squished or leave empty space.
+    */
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+/* Image zoom on hover */
+.portfolio-item:hover img {
+    transform: scale(1.1);    /* zoom to 110% — smooth because of transition */
+}
+
+.portfolio-overlay {
+    /*
+       position: absolute — positioned relative to nearest positioned ancestor
+       (which is .portfolio-item with position: relative).
+       Removed from normal flow — doesn't push other elements.
+    */
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    /*
+       Gradient overlay: transparent at top → dark at bottom.
+       Creates a "fading to dark" effect over the image.
+       Text on the dark part is readable.
+    */
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    color: white;
+    padding: var(--space-md);
+    /*
+       transform: translateY(100%) — overlay is pushed DOWN by 100% of its height.
+       It's completely hidden below the container (hidden by overflow: hidden).
+       On hover, it slides UP to its normal position.
+    */
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+}
+
+.portfolio-item:hover .portfolio-overlay {
+    transform: translateY(0);  /* slide UP to visible position */
+}
+
+.portfolio-overlay h4 {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+.portfolio-overlay p {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin: 0;
+}
+
+
+/* ============================================================
+   11. TABS COMPONENT
+   ============================================================
+*/
+.tabs-section {
+    padding: var(--space-section);
+}
+
+.tabs-container {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.tab-buttons {
+    display: flex;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.tab-btn {
+    padding: 12px 25px;
+    border: none;
+    background: none;
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 1rem;
+    /*
+       border-bottom: 3px solid transparent — invisible border.
+       On active/hover, color changes → underline appears.
+       margin-bottom: -2px — overlaps the parent's border-bottom.
+    */
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: var(--transition);
+}
+
+.tab-btn.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+    font-weight: 600;
+}
+
+.tab-btn:hover {
+    color: var(--primary);
+}
+
+.tab-panel {
+    display: none;             /* ALL panels hidden by default */
+    padding: 30px 20px;
+    animation: fadeIn 0.3s ease;
+}
+
+.tab-panel.active {
+    display: block;            /* ONLY active panel shown */
+}
+
+.tab-panel h3 {
+    margin-bottom: var(--space-sm);
+    color: var(--primary);
+}
+
+
+/* ============================================================
+   12. ACCORDION
+   ============================================================
+*/
+.faq-section {
+    padding: var(--space-section);
+    background: var(--bg-section);
+}
+
+.accordion {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.accordion-item {
+    margin-bottom: 8px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+}
+
+.accordion-header {
+    width: 100%;
+    padding: 18px 20px;
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: var(--transition);
+}
+
+.accordion-header:hover {
+    background: var(--bg-section);
+}
+
+.accordion-icon {
+    font-size: 1.4rem;
+    transition: transform 0.3s ease;
+    color: var(--primary);
+}
+
+/* When item is active, rotate the + icon */
+.accordion-item.active .accordion-icon {
+    transform: rotate(45deg);  /* + becomes × */
+}
+
+.accordion-body {
+    /*
+       max-height: 0 → collapsed (no visible content).
+       overflow: hidden → hide content that exceeds max-height.
+       transition: max-height → smooth expand/collapse animation.
+       
+       WHY max-height instead of height:
+       height: 0 to height: auto cannot be animated!
+       max-height: 0 to max-height: 300px CAN be animated.
+    */
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    padding: 0 20px;
+}
+
+.accordion-item.active .accordion-body {
+    max-height: 300px;
+    padding: 0 20px 20px;
+}
+
+.accordion-body p {
+    color: var(--text-secondary);
+    line-height: 1.8;
+}
+
+
+/* ============================================================
+   13. CONTACT FORM
+   ============================================================
+   Uses: Grid layout, Form styling, Focus states, Validation
+*/
+.contact {
+    padding: var(--space-section);
+}
+
+.contact-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr;   /* info takes 1/3, form takes 2/3 */
+    gap: 50px;
+    max-width: var(--max-width);
+    margin: 0 auto;
+}
+
+/* Contact Info */
+.contact-info {
+    padding: var(--space-md);
+}
+
+.info-item {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+    align-items: flex-start;
+}
+
+.info-icon {
+    font-size: 1.8rem;
+}
+
+.info-item h4 {
+    margin-bottom: 3px;
+}
+
+.info-item p {
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* Form Styling */
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+}
+
+.form-group {
+    flex: 1;
+    margin-bottom: 5px;
+}
+
+.form-group label,
+.form-label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+
+/* 
+   Input styling — targets ALL common input types.
+   Attribute selectors: input[type="text"] targets only text inputs.
+*/
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+input[type="url"],
+input[type="date"],
+select,
+textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    outline: none;                 /* remove default blue outline */
+    background: var(--bg-card);
+    color: var(--text-primary);
+}
+
+/*
+   :focus pseudo-class — when input is selected/clicked.
+   Visual feedback: border turns blue, subtle glow appears.
+*/
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+/* 
+   Validation state classes — added by JavaScript.
+   Green border for valid, red border for invalid.
+*/
+input.valid { border-color: var(--success); }
+input.invalid { border-color: var(--danger); }
+
+/* Error message text */
+.error-message {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--danger);
+    margin-top: 4px;
+    min-height: 18px;              /* prevent layout shift */
+}
+
+/* 
+   ::placeholder pseudo-element — styles placeholder text.
+   Note: double colon :: for pseudo-elements.
+*/
+::placeholder {
+    color: var(--text-light);
+    font-style: italic;
+}
+
+/* Password wrapper for show/hide toggle */
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper input {
+    padding-right: 45px;           /* space for toggle button */
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    padding: 0;
+}
+
+/* Password strength bar */
+.strength-bar {
+    height: 6px;
+    background: var(--border-light);
+    border-radius: 3px;
+    margin-top: 8px;
+    overflow: hidden;
+}
+
+.strength-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 3px;
+    transition: width 0.3s, background-color 0.3s;
+}
+
+/* Color input and display */
+input[type="color"] {
+    width: 60px;
+    height: 40px;
+    padding: 2px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+}
+
+.color-display {
+    display: inline-block;
+    margin-left: var(--space-sm);
+    font-family: var(--font-code);
+    font-weight: 600;
+}
+
+/* Range input slider */
+input[type="range"] {
+    width: 100%;
+    cursor: pointer;
+}
+
+/* Radio and Checkbox groups */
+.radio-group,
+.checkbox-group {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 5px;
+}
+
+.radio-label,
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-weight: 400;
+}
+
+/* Character count for textarea */
+.char-count {
+    float: right;
+    font-weight: 400;
+    font-size: 0.85rem;
+    color: var(--text-light);
+}
+
+.char-count.warning { color: var(--warning); }
+.char-count.danger { color: var(--danger); font-weight: 600; }
+
+/* File input */
+input[type="file"] {
+    padding: 10px;
+    border: 2px dashed var(--border-color);
+    border-radius: var(--radius-md);
+    width: 100%;
+    cursor: pointer;
+}
+
+/* Avatar preview */
+.avatar-preview {
+    width: 80px;
+    height: 80px;
+    border-radius: var(--radius-full);
+    object-fit: cover;
+    margin-top: var(--space-sm);
+    border: 3px solid var(--primary);
+}
+
+/* Form buttons row */
+.form-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: var(--space-sm);
+}
+
+/* Form result display */
+.form-result {
+    max-width: var(--max-width);
+    margin: var(--space-md) auto;
+    padding: 0 5%;
+}
+
+.success-card {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    color: #155724;
+}
+
+.success-card h3 {
+    margin-bottom: var(--space-sm);
+}
+
+
+/* ============================================================
+   14. MULTIMEDIA
+   ============================================================
+*/
+.multimedia-section {
+    padding: var(--space-section);
+    background: var(--bg-section);
+}
+
+.media-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: var(--max-width);
+    margin: 0 auto;
+}
+
+.media-item {
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    padding: var(--space-md);
+}
+
+.responsive-img {
+    border-radius: var(--radius-md);
+}
+
+.media-caption {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-top: var(--space-sm);
+}
+
+/* Responsive video */
+video {
+    border-radius: var(--radius-md);
+}
+
+
+/* ============================================================
+   15. INTERACTIVE COMPONENTS
+   ============================================================
+*/
+.interactive-section {
+    padding: var(--space-section);
+}
+
+.components-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    max-width: var(--max-width);
+    margin: 0 auto;
+}
+
+.component-card {
+    background: var(--bg-card);
+    padding: 25px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+}
+
+.component-card h3 {
+    margin-bottom: var(--space-sm);
+    color: var(--text-primary);
+}
+
+.component-card p {
+    color: var(--text-secondary);
+    margin-bottom: var(--space-md);
+    font-size: 0.9rem;
+}
+
+/* Todo list inside component card */
+.todo-input-group {
+    display: flex;
+    gap: 8px;
+    margin-bottom: var(--space-sm);
+}
+
+.todo-input-group input {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    outline: none;
+}
+
+.todo-input-group input:focus {
+    border-color: var(--primary);
+}
+
+.todo-list {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.todo-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: var(--bg-section);
+    border-radius: var(--radius-sm);
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.todo-list li.completed {
+    text-decoration: line-through;
+    color: var(--text-light);
+}
+
+.todo-delete {
+    background: none;
+    border: none;
+    color: var(--danger);
+    font-size: 1.1rem;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+}
+
+.todo-delete:hover {
+    opacity: 1;
+}
+
+/* Counter display */
+.counter-display {
+    font-size: 3rem;
+    font-weight: 800;
+    text-align: center;
+    margin: var(--space-md) 0;
+    transition: color 0.3s;
+}
+
+.counter-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+/* Color result display */
+.color-result {
+    font-family: var(--font-code);
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-top: var(--space-sm);
+    padding: var(--space-sm);
+    border-radius: var(--radius-md);
+    background: var(--bg-section);
+    text-align: center;
+}
+
+/* Clock display */
+.clock-display {
+    font-size: 2.5rem;
+    font-family: var(--font-code);
+    font-weight: 700;
+    text-align: center;
+    color: var(--primary);
+    padding: var(--space-md) 0;
+}
+
+.clock-date {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* Search filter */
+.search-list {
+    max-height: 180px;
+    overflow-y: auto;
+    margin-top: var(--space-sm);
+}
+
+.search-item {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border-light);
+    transition: var(--transition-fast);
+}
+
+.search-item.hidden {
+    display: none;
+}
+
+.search-item:hover {
+    background: var(--primary-light);
+}
+
+#searchInput {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    outline: none;
+    margin-bottom: var(--space-sm);
+}
+
+#searchInput:focus {
+    border-color: var(--primary);
+}
+
+
+/* ============================================================
+   16. MODAL
+   ============================================================
+*/
+.modal-overlay {
+    /*
+       display: none — completely hidden by default.
+       When active class is added (by JS), changes to display: flex.
+    */
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /*
+       rgba(0,0,0,0.5) — semi-transparent black overlay.
+       0.5 = 50% opacity — you can see the page behind it (dimmed).
+    */
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal {
+    background: var(--bg-card);
+    padding: 40px;
+    border-radius: var(--radius-lg);
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+    animation: slideUp 0.3s ease;
+    color: var(--text-primary);
+}
+
+.modal h2 {
+    margin-bottom: var(--space-sm);
+}
+
+.modal p {
+    color: var(--text-secondary);
+    margin-bottom: var(--space-md);
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 2rem;
+    background: none;
+    border: none;
+    color: var(--text-light);
+    line-height: 1;
+}
+
+.modal-close:hover {
+    color: var(--danger);
+}
+
+
+/* ============================================================
+   17. FOOTER
+   ============================================================
+*/
+.footer {
+    background: #1a1a2e;
+    color: #aaa;
+    padding: 60px 5% 20px;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 40px;
+    max-width: var(--max-width);
+    margin: 0 auto;
+}
+
+.footer-section h3 {
+    color: white;
+    margin-bottom: var(--space-md);
+    font-size: 1.2rem;
+}
+
+.footer-section h3 span {
+    color: var(--primary);
+}
+
+.footer-section p {
+    font-size: 0.9rem;
+    line-height: 1.8;
+}
+
+.footer-section ul li {
+    margin-bottom: var(--space-sm);
+}
+
+.footer-section a {
+    color: #aaa;
+    transition: color 0.3s;
+    font-size: 0.9rem;
+}
+
+.footer-section a:hover {
+    color: var(--primary);
+}
+
+.social-links {
+    display: flex;
+    gap: 12px;
+}
+
+.social-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-full);
+    background: #2d3748;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #aaa;
+    font-size: 0.85rem;
+    font-weight: 700;
+    transition: var(--transition);
+}
+
+.social-icon:hover {
+    background: var(--primary);
+    color: white;
+    transform: translateY(-3px);
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: var(--space-lg);
+    padding-top: var(--space-md);
+    border-top: 1px solid #333;
+    font-size: 0.85rem;
+}
+
+
+/* ============================================================
+   18. BACK TO TOP BUTTON
+   ============================================================
+*/
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-full);
+    font-size: 1.5rem;
+    box-shadow: var(--shadow-md);
+    z-index: 999;
+    /* 
+       opacity: 0 and visibility: hidden → invisible by default.
+       Using both: opacity for animation, visibility to prevent clicks.
+    */
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition);
+}
+
+.back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.back-to-top:hover {
+    background: var(--primary-dark);
+    transform: translateY(-3px);
+}
+
+
+/* ============================================================
+   19. SCROLL PROGRESS BAR
+   ============================================================
+*/
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 4px;
+    width: 0%;
+    background: linear-gradient(to right, var(--primary), #00d4ff);
+    z-index: 1001;                 /* above navbar */
+    transition: width 0.1s;
+}
+
+
+/* ============================================================
+   20. DARK MODE
+   ============================================================
+   Override CSS variables when body has 'dark-mode' class.
+   Every element using var(--variable) updates automatically!
+*/
+body.dark-mode {
+    --text-primary: #eeeeee;
+    --text-secondary: #bbbbbb;
+    --text-light: #888888;
+    --bg-body: #0f0f1a;
+    --bg-section: #1a1a2e;
+    --bg-card: #16213e;
+    --border-color: #333355;
+    --border-light: #2a2a4a;
+}
+
+body.dark-mode .navbar {
+    background: rgba(15, 15, 26, 0.95);
+}
+
+body.dark-mode .navbar.scrolled {
+    background: rgba(15, 15, 26, 0.98);
+}
+
+body.dark-mode .dark-toggle {
+    border-color: #555;
+}
+
+body.dark-mode code {
+    background: #2a2a4a;
+    color: #7dc4ff;
+}
+
+/* 
+   ::selection pseudo-element — styles highlighted/selected text.
+   When user selects text with mouse, it shows these colors.
+*/
+::selection {
+    background: var(--primary);
+    color: white;
+}
+
+
+/* ============================================================
+   21. ANIMATIONS (@keyframes)
+   ============================================================
+   @keyframes defines the animation steps.
+   Used with: animation: name duration timing fill-mode;
+*/
+
+/* Fade in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Slide up + fade in */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Spinner rotation */
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Pulse (scale up and down) */
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+
+/* ============================================================
+   22. RESPONSIVE DESIGN (@media queries)
+   ============================================================
+   @media queries apply CSS only when conditions are met.
+   
+   MOBILE FIRST: default styles = mobile.
+   Then ADD rules for larger screens with min-width.
+   
+   DESKTOP FIRST: default styles = desktop.
+   Then OVERRIDE for smaller screens with max-width.
+   
+   Common breakpoints:
+   480px  — Large phones
+   768px  — Tablets (MOST COMMON)
+   1024px — Small laptops
+   1200px — Desktops
+*/
+
+/* Tablet and below */
+@media (max-width: 768px) {
+    /* Show hamburger, hide desktop nav links */
+    .hamburger {
+        display: flex;
+    }
+
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: var(--navbar-height);
+        left: 0;
+        width: 100%;
+        flex-direction: column;
+        background: var(--bg-body);
+        padding: var(--space-md) 5%;
+        box-shadow: var(--shadow-md);
+        gap: 0;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .nav-links li {
+        padding: 12px 0;
+        border-bottom: 1px solid var(--border-light);
+    }
+
+    /* Smaller hero text */
+    .hero h1 { font-size: 2rem; }
+    .hero p { font-size: 1rem; }
+
+    /* Stack about section vertically */
+    .about-container {
+        flex-direction: column;
+    }
+
+    .about-sidebar {
+        position: static;          /* unstick sidebar on mobile */
+    }
+
+    /* Stack form layout */
+    .contact-container {
+        grid-template-columns: 1fr;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+
+    /* Smaller section padding */
+    .services,
+    .portfolio,
+    .tabs-section,
+    .faq-section,
+    .contact,
+    .multimedia-section,
+    .interactive-section {
+        padding: 50px 5%;
+    }
+
+    /* Stats: 2 columns instead of 4 */
+    .stats {
+        flex-wrap: wrap;
+    }
+
+    .stat {
+        flex: 0 0 50%;
+    }
+
+    /* Adjust heading sizes */
+    .section-title { font-size: 1.5rem; }
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.5rem; }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+    .hero h1 { font-size: 1.5rem; }
+    .hero-buttons { flex-direction: column; align-items: center; }
+    .btn { width: 100%; text-align: center; }
+    .form-buttons { flex-direction: column; }
+    .counter-buttons { flex-direction: row; }
+    .stat { flex: 0 0 100%; }
+}

@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Portal - Naukri Clone</title>
+    
+    <!-- Using Google Fonts for better typography like the real site -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', Roboto, 'Segoe UI', sans-serif;
+}
+
+body {
+    background-color: #f3f6fa;
+    color: #091e42;
+    min-height: 100vh;
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Constants */
+:root {
+    --primary-blue: #275df5;
+    --hover-blue: #1c4bd6;
+    --orange: #f05537;
+    --text-dark: #000000;
+    --text-gray: #7a7a7a;
+    --border-color: #ebecf0;
+    --bg-white: #ffffff;
+    --bg-gray: #f8f9fa;
+    --border-radius-sm: 8px;
+    --border-radius-md: 16px;
+    --border-radius-pill: 50px;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--bg-white);
+    padding: 0 40px;
+    height: 72px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--primary-blue);
+    letter-spacing: -0.5px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links li a {
+    color: var(--text-gray);
+    font-weight: 500;
+    font-size: 15px;
+    padding: 10px 0;
+}
+
+.nav-links li a:hover, .nav-links li a.active {
+    color: var(--text-dark);
+    position: relative;
+}
+
+.nav-links li a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--orange);
+    border-radius: 2px;
+}
+
+.nav-middle .search-bar {
+    width: 400px;
+    padding: 12px 20px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-pill);
+    background-color: var(--bg-white);
+    font-size: 14px;
+    outline: none;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.nav-middle .search-bar:focus {
+    border-color: var(--primary-blue);
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.naukri-360 {
+    background: transparent;
+    border: 1px solid var(--primary-blue);
+    color: var(--primary-blue);
+    padding: 6px 12px;
+    border-radius: var(--border-radius-pill);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.profile-menu {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-pill);
+    cursor: pointer;
+}
+
+/* Layout */
+.main-container {
+    max-width: 1280px;
+    margin: 24px auto;
+    display: grid;
+    grid-template-columns: 280px 1fr 300px;
+    gap: 24px;
+    padding: 0 20px;
+}
+
+/* Cards Base */
+.card {
+    background: var(--bg-white);
+    border-radius: var(--border-radius-md);
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    margin-bottom: 20px;
+}
+
+/* Left Sidebar */
+.profile-card {
+    text-align: center;
+}
+
+.profile-img-placeholder {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #e9ecef;
+    margin: 0 auto 12px;
+    border: 3px solid #dee2e6;
+}
+
+.profile-card h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.completion-bar {
+    color: var(--orange);
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.missing-details {
+    background-color: #fff8f5;
+    padding: 16px;
+    border-radius: var(--border-radius-sm);
+    text-align: left;
+    font-size: 13px;
+}
+
+.missing-details ul {
+    margin: 12px 0;
+}
+
+.missing-details li {
+    margin-bottom: 8px;
+    color: var(--text-gray);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--orange);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius-pill);
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: #d84a2d;
+}
+
+.sidebar-menu {
+    padding: 12px;
+}
+
+.sidebar-menu li a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: var(--border-radius-sm);
+    color: var(--text-gray);
+    font-weight: 500;
+}
+
+.sidebar-menu li a.active, .sidebar-menu li a:hover {
+    background-color: var(--bg-gray);
+    color: var(--text-dark);
+}
+
+.how-it-works {
+    color: var(--primary-blue);
+    font-size: 14px;
+    font-weight: 500;
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* Middle Content */
+.diversity-banner {
+    position: relative;
+    padding-top: 32px;
+}
+
+.badge {
+    position: absolute;
+    top: -10px;
+    right: 20px;
+    background-color: #f3f0ff;
+    color: #6a35ff;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.diversity-banner h2 {
+    font-size: 18px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.diversity-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-outline {
+    padding: 8px 16px;
+    border: 1px solid var(--border-color);
+    background: transparent;
+    border-radius: var(--border-radius-pill);
+    color: var(--text-gray);
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.btn-outline.selected {
+    border-color: var(--primary-blue);
+    color: var(--primary-blue);
+    background-color: #f0f4ff;
+}
+
+.btn-disabled {
+    padding: 8px 24px;
+    border: none;
+    background-color: var(--border-color);
+    color: #a0a0a0;
+    border-radius: var(--border-radius-pill);
+    margin-left: auto;
+    font-weight: 600;
+}
+
+.btn-disabled:not([disabled]) {
+    background-color: var(--primary-blue);
+    color: white;
+    cursor: pointer;
+}
+
+/* Recommended Jobs */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.view-all {
+    color: var(--primary-blue);
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 20px;
+}
+
+.tab {
+    background: transparent;
+    border: none;
+    padding: 10px 20px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-gray);
+    cursor: pointer;
+    position: relative;
+}
+
+.tab.active {
+    color: var(--text-dark);
+}
+
+.tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--text-dark);
+    border-radius: 2px 2px 0 0;
+}
+
+.jobs-carousel {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    scrollbar-width: thin;
+}
+
+.job-card {
+    min-width: 280px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    padding: 16px;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: box-shadow 0.2s;
+}
+
+.job-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.job-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.company-logo {
+    width: 40px;
+    height: 40px;
+    background-color: var(--bg-gray);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.post-time {
+    font-size: 12px;
+    color: var(--text-gray);
+}
+
+.job-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.company-name {
+    font-size: 14px;
+    color: var(--text-gray);
+    margin-bottom: 12px;
+}
+
+.job-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-gray);
+}
+
+/* Resume Banner */
+.resume-banner.flex-row {
+    display: flex;
+    align-items: center;
+    background-color: #fffdfa;
+    border: 1px solid #ffe8c2;
+    gap: 20px;
+}
+
+.resume-image {
+    width: 80px;
+    height: 100px;
+    background-color: #ffd4a8;
+    border-radius: 4px;
+}
+
+.resume-text h2 {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.resume-text ol {
+    margin-left: 20px;
+    font-size: 13px;
+    color: var(--text-gray);
+}
+
+.resume-text li {
+    margin-bottom: 4px;
+}
+
+.resume-banner .btn-primary {
+    width: auto;
+    padding: 10px 24px;
+    background-color: var(--primary-blue);
+    margin-left: auto;
+}
+
+/* Right Sidebar */
+.whatsapp-card {
+    text-align: center;
+}
+
+.whatsapp-header {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.whatsapp-icon {
+    width: 48px;
+    height: 48px;
+    background-color: #25d366;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.whatsapp-card h3 {
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.whatsapp-card p {
+    font-size: 13px;
+    color: var(--text-gray);
+    margin-bottom: 16px;
+}
+
+.btn-whatsapp {
+    width: 100%;
+    padding: 10px;
+    background-color: #f05537;
+    color: white;
+    border: none;
+    border-radius: var(--border-radius-pill);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.ad-card .placeholder {
+    height: 140px;
+    background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+    border-radius: 8px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+}
+
+.ad-card p {
+    font-size: 14px;
+    line-height: 1.4;
+    margin-bottom: 8px;
+}
+
+.know-more {
+    color: var(--primary-blue);
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .main-container {
+        grid-template-columns: 240px 1fr;
+    }
+    .right-sidebar {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-container {
+        grid-template-columns: 1fr;
+    }
+    .left-sidebar {
+        display: none;
+    }
+    .nav-middle {
+        display: none;
+    }
+}
+
+/* =========================================
+   Interactive Features (Dropdowns & Toasts)
+   ========================================= */
+
+/* Dropdowns */
+.icon-container {
+    position: relative;
+    outline: none;
+}
+
+.dropdown-menu {
+    display: none; /* Hidden by default */
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 12px;
+    background: var(--bg-white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    min-width: 220px;
+    z-index: 1000;
+    overflow: hidden;
+    animation: fadeIn 0.2s ease;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+.dropdown-header {
+    padding: 12px 16px;
+    font-weight: 600;
+    font-size: 14px;
+    background: var(--bg-gray);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.dropdown-item {
+    padding: 12px 16px;
+    font-size: 14px;
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.dropdown-item:hover {
+    background: #f0f4ff;
+    color: var(--primary-blue);
+}
+
+.dropdown-item.text-danger:hover {
+    color: #d93025;
+    background: #fce8e6;
+}
+
+.pointer-events-none {
+    pointer-events: none;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: var(--orange);
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    height: 16px;
+    min-width: 16px;
+    padding: 0 4px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Toast Notifications */
+.toast-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 9999;
+}
+
+.toast {
+    background: #333;
+    color: white;
+    padding: 14px 24px;
+    border-radius: var(--border-radius-sm);
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: slideInRight 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(10px); }
+}
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="navbar">
+        <div class="nav-left">
+            <a href="#" class="logo">naukri</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#jobs" class="active">Jobs</a></li>
+                <li><a href="#companies">Companies</a></li>
+                <li><a href="#services">Services</a></li>
+            </ul>
+        </div>
+        <div class="nav-middle">
+            <input type="text" class="search-bar" placeholder="search job here">
+        </div>
+            <div class="nav-right">
+            <button class="naukri-360">naukri 360</button>
+            <div class="icon-container bell-container" tabindex="0">
+                <div class="icon bell-icon" data-action="toggle-dropdown" data-target="notificationDropdown" style="font-size: 20px; color: var(--text-gray); cursor: pointer; position: relative;">🔔<span class="notification-badge">3</span></div>
+                <div class="dropdown-menu" id="notificationDropdown">
+                    <div class="dropdown-header">Notifications</div>
+                    <div class="dropdown-item">Someone viewed your profile</div>
+                    <div class="dropdown-item">New job matches for Sales Executive</div>
+                    <div class="dropdown-item">Complete your profile to 100%</div>
+                </div>
+            </div>
+            <div class="icon-container profile-menu-container" tabindex="0">
+                <div class="profile-menu" data-action="toggle-dropdown" data-target="profileDropdown">
+                    <div class="icon hamburger-icon pointer-events-none">≡</div>
+                    <div class="icon user-icon pointer-events-none">👤</div>
+                </div>
+                <div class="dropdown-menu" id="profileDropdown">
+                    <div class="dropdown-header">Aditya KR</div>
+                    <div class="dropdown-item" data-action="toast" data-message="Opening Profile settings...">Profile Settings</div>
+                    <div class="dropdown-item" data-action="toast" data-message="Opening Resume...">My Resume</div>
+                    <hr style="border:0; border-top:1px solid #eee; margin:5px 0;">
+                    <div class="dropdown-item text-danger" data-action="toast" data-message="Logging out...">Logout</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container" id="mainContainer">
+        <!-- Left Sidebar -->
+        <aside class="left-sidebar">
+            <div class="profile-card card">
+                <div class="profile-img-placeholder"></div>
+                <h3>Aditya KR</h3>
+                <div class="completion-bar">23%</div>
+                <div class="missing-details">
+                    <p style="margin-bottom: 8px;"><strong>What are you missing?</strong></p>
+                    <ul>
+                        <li><span>❌</span> Daily job recommendations</li>
+                        <li><span>❌</span> Job application updates</li>
+                        <li><span>❌</span> Direct jobs from recruiters</li>
+                    </ul>
+                    <button style="margin-top: 10px;" class="btn-primary" data-action="complete-profile">Complete profile</button>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu card">
+                <ul>
+                    <li><a href="#" class="active"><span class="icon">🏠</span> My home</a></li>
+                    <li><a href="#"><span class="icon">💼</span> Jobs</a></li>
+                    <li><a href="#"><span class="icon">🏢</span> Companies</a></li>
+                    <li><a href="#"><span class="icon">📝</span> Blogs</a></li>
+                </ul>
+            </nav>
+            <a href="#" class="how-it-works">How Naukri works?</a>
+        </aside>
+
+        <!-- Middle Content -->
+        <main class="middle-content">
+            <!-- Diversity Banner -->
+            <div class="diversity-banner card">
+                <span class="badge">Diversity & inclusion</span>
+                <h2>Companies want to build inclusive teams, help us identify your disability status for better jobs.</h2>
+                <div class="diversity-actions">
+                    <button class="btn-outline" data-action="select-disability" data-value="yes">I have a disability</button>
+                    <button class="btn-outline" data-action="select-disability" data-value="no">I don't have a disability</button>
+                    <button class="btn-disabled" id="submitDisability" disabled data-action="submit-disability">Submit</button>
+                </div>
+            </div>
+
+            <!-- Recommended Jobs -->
+            <div class="recommended-jobs card">
+                <div class="section-header">
+                    <h2>Recommended jobs for you</h2>
+                    <a href="#" class="view-all">View all</a>
+                </div>
+                <div class="tabs" id="jobTabs">
+                    <button class="tab active" data-tab="profile">Profile (74)</button>
+                    <button class="tab" data-tab="preferences">Preferences (0)</button>
+                </div>
+                
+                <div class="jobs-carousel" id="jobsCarousel">
+                    <!-- Job Cards populated dynamically by JS -->
+                </div>
+            </div>
+
+            <!-- Create Resume Banner -->
+            <div class="resume-banner card flex-row">
+                <div class="resume-image" style="display: flex; align-items: center; justify-content: center; font-size: 32px;">📄</div>
+                <div class="resume-text">
+                    <h2>Create your resume in 3 easy steps ✨</h2>
+                    <ol>
+                        <li>Add the missing details in your profile</li>
+                        <li>Choose a template for your resume</li>
+                        <li>Improve the content with AI</li>
+                    </ol>
+                </div>
+                <button class="btn-primary" data-action="create-resume">Create resume</button>
+            </div>
+        </main>
+
+        <!-- Right Sidebar -->
+        <aside class="right-sidebar">
+            <div class="whatsapp-card card">
+                <div class="whatsapp-header">
+                    <div class="whatsapp-icon">WhatsApp</div>
+                </div>
+                <h3>Get updates directly on WhatsApp!</h3>
+                <p>Know instantly when status of your job application changes</p>
+                <button class="btn-whatsapp" data-action="opt-in-whatsapp">Opt-in now</button>
+            </div>
+
+            <div class="ad-card card">
+                <div class="ad-image placeholder">
+                    <div style="text-align: center;">
+                        <div>WHAT WOMEN</div>
+                        <div>PROFESSIONALS WANT</div>
+                    </div>
+                </div>
+                <p><strong>50% women hide marriage & maternity plans amid bias fears</strong></p>
+                <a href="#" class="know-more">Know more</a>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script>
+// Sample Data
+const jobsData = [
+    {
+        id: 1,
+        logo: 'M',
+        time: '2d ago',
+        title: '14th & 15th March ...',
+        company: 'Muthoot Fin...',
+        rating: '3.7',
+        location: 'Jalandhar, Mukerian...'
+    },
+    {
+        id: 2,
+        logo: 'HDB',
+        time: '4d ago',
+        title: 'Sales Executive',
+        company: 'HDB Financi...',
+        rating: '3.9',
+        location: 'Mohali, Panchkula'
+    },
+    {
+        id: 3,
+        logo: 'DB',
+        time: '22h ago',
+        title: 'Senior Manager',
+        company: 'Dainik Bhas...',
+        rating: '4.2',
+        location: 'Panchkula, Sonipat'
+    },
+    {
+        id: 4,
+        logo: 'TCS',
+        time: '1h ago',
+        title: 'Frontend Developer',
+        company: 'Tata Consultancy...',
+        rating: '4.0',
+        location: 'Remote, Pune'
+    }
+];
+
+// Initialize UI
+document.addEventListener('DOMContentLoaded', () => {
+    renderJobs(jobsData); // Initial load of all jobs
+    
+    // Event Delegation: We listen on the body level to handle all interactions
+    document.body.addEventListener('click', handleInteractions);
+
+    // Search Input Event
+    const searchBar = document.querySelector('.search-bar');
+    if (searchBar) {
+        searchBar.addEventListener('input', handleSearch);
+    }
+
+    // Close dropdowns if clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.icon-container')) {
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                menu.classList.remove('show');
+            });
+        }
+    });
+});
+
+// Render Jobs
+function renderJobs(jobsArray) {
+    const carousel = document.getElementById('jobsCarousel');
+    if (!carousel) return;
+
+    if (jobsArray.length === 0) {
+        carousel.innerHTML = '<p style="padding: 20px; color: var(--text-gray);">No jobs found matching your search.</p>';
+        return;
+    }
+
+    carousel.innerHTML = jobsArray.map(job => `
+        <div class="job-card" data-action="view-job" data-id="${job.id}">
+            <div class="job-header">
+                <div class="company-logo">${job.logo}</div>
+                <div class="post-time">${job.time}</div>
+            </div>
+            <h3 class="job-title">${job.title}</h3>
+            <div class="company-name">${job.company} ★ ${job.rating}</div>
+            <div class="job-meta">
+                <span class="location-icon">📍</span> ${job.location}
+            </div>
+        </div>
+    `).join('');
+}
+
+// Search Feature mapping Real-time
+function handleSearch(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    
+    const filteredJobs = jobsData.filter(job => {
+        return job.title.toLowerCase().includes(searchTerm) || 
+               job.company.toLowerCase().includes(searchTerm) ||
+               job.location.toLowerCase().includes(searchTerm);
+    });
+
+    // Make sure we are on the 'Profile' tab to show results realistically
+    const profileTab = document.querySelector('[data-tab="profile"]');
+    if (profileTab && !profileTab.classList.contains('active')) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        profileTab.classList.add('active');
+    }
+
+    renderJobs(filteredJobs);
+}
+
+// Toast Notification System
+function showToast(message) {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = `<span style="color: #4ade80;">✔</span> ${message}`;
+    
+    container.appendChild(toast);
+
+    // Remove toast after animation finishes (3 seconds)
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
+
+// Centralized Event Handler using Delegation
+function handleInteractions(e) {
+    // Dropdown Toggles Structure Handling
+    const toggler = e.target.closest('[data-action="toggle-dropdown"]');
+    if (toggler) {
+        const targetId = toggler.getAttribute('data-target');
+        const targetMenu = document.getElementById(targetId);
+        
+        // Close others first
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+            if (menu.id !== targetId) menu.classList.remove('show');
+        });
+
+        // Toggle requested
+        if (targetMenu) {
+            targetMenu.classList.toggle('show');
+        }
+        return; // Event handled
+    }
+
+    // Interactive Actions Handling
+    const actionTarget = e.target.closest('[data-action]');
+    if (actionTarget) {
+        const action = actionTarget.getAttribute('data-action');
+
+        switch (action) {
+            case 'complete-profile':
+                showToast('Redirecting to profile completion page...');
+                break;
+            
+            case 'select-disability':
+                // Toggle selection logic
+                document.querySelectorAll('[data-action="select-disability"]').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                actionTarget.classList.add('selected');
+                
+                // Enable submit button
+                const submitBtn = document.getElementById('submitDisability');
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                }
+                break;
+
+            case 'submit-disability':
+                showToast('Disability status submitted successfully!');
+                actionTarget.disabled = true;
+                document.querySelectorAll('[data-action="select-disability"]').forEach(btn => {
+                    btn.classList.remove('selected');
+                    btn.disabled = true; // Disable selections after submit
+                });
+                break;
+
+            case 'create-resume':
+                showToast('Opening Resume Builder sequence...');
+                break;
+
+            case 'opt-in-whatsapp':
+                showToast('Success! You opted in for WhatsApp updates.');
+                actionTarget.innerText = "Opted IN ✓";
+                actionTarget.style.backgroundColor = "#25d366";
+                break;
+
+            case 'view-job':
+                const jobName = actionTarget.querySelector('.job-title').innerText;
+                showToast(`Opening details for ${jobName}`);
+                break;
+
+            case 'toast':
+                // For simple elements that just want to trigger a generic toast (like dropdown items)
+                const message = actionTarget.getAttribute('data-message');
+                if (message) {
+                    showToast(message);
+                    // Also close dropdown if action was inside one
+                    document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
+                }
+                break;
+        }
+        return; // Event handled
+    }
+
+    // Tab Handling
+    const tabTarget = e.target.closest('[data-tab]');
+    if (tabTarget) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tabTarget.classList.add('active');
+        
+        const tabName = tabTarget.getAttribute('data-tab');
+        
+        if (tabName === 'preferences') {
+            document.getElementById('jobsCarousel').innerHTML = '<p style="padding: 20px; color: var(--text-gray);">No jobs in preferences yet.</p>';
+        } else {
+            // Reset Search bar when switching back to profile
+            const sb = document.querySelector('.search-bar');
+            if (sb) sb.value = '';
+            renderJobs(jobsData); // Show all profile based jobs
+        }
+    }
+}
+    </script>
+</body>
+</html>

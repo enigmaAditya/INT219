@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Section Delegation</title>
+</head>
+<body>
+    <style>
+        #container{
+            display:flex;
+            flex-direction:column;
+            /* gap:10px; */
+            margin:20px;
+            border:1px lightcoral solid;
+            border-radius:5px;
+        }
+        .section{
+            /* margin-top:10px; */
+            border: 1px solid;
+            padding:10px;
+            background-color:lightgray;
+        }
+
+    </style>
+        <h1>Dynamic Accordion Menu</h1>
+    <div id="container">
+        <div class="section">
+            <h2>Section 1</h2>
+            <p>Content for Section 1.</p>
+        </div>
+        <div class="section">
+            <h2>Section 2</h2>
+            <p>Content for Section 2.</p>
+        </div>
+        <div class="section">
+            <h2>Section 3</h2>
+            <p>Content for Section 3.</p>
+        </div>
+    </div>
+    <button id="Btn">Add Section</button>
+
+    <script>
+        const container = document.getElementById('container');
+        const addbtn = document.getElementById('Btn');
+        let sectionCount=3;
+
+        container.addEventListener('click',(e)=>{
+            let header=e.target.closest('h2');
+            let content=header.nextElementSibling;
+            if(content.style.display==='block'){
+                content.style.display='none';
+            } else {
+                content.style.display='block';
+            }
+        });
+
+        //dynamic section creation
+        addbtn.addEventListener('click',()=>{
+            sectionCount++;
+            const newSection=document.createElement('div');
+            newSection.classList.add('section');
+            newSection.innerHTML=`
+                <h2>Section ${sectionCount}</h2>
+                <div class="content">
+                    <p>Content for Section ${sectionCount}.</p>
+                </div>
+            `;
+            container.appendChild(newSection);
+        });
+
+     
+    </script>
+    
+</body>
+</html>

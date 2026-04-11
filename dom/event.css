@@ -1,0 +1,18 @@
+#myButton {
+    background-color: lightblue;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.box {
+    width: 200px;
+    height: 100px;
+    border: solid rgb(137, 75, 4) 5px;
+    border-radius: 10px;
+    background-color:mediumspringgreen;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

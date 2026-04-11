@@ -1,0 +1,1081 @@
+<!--
+============================================================
+    HTML5 COMPLETE REFERENCE FILE
+    Every concept from Unit I & II demonstrated
+============================================================
+
+TABLE OF CONTENTS:
+1. Boilerplate & Head
+2. Navbar (Semantic: header, nav)
+3. Hero Section (section)
+4. Services Cards (section with grid)
+5. About Section (article, aside)
+6. Stats Counter Section
+7. Portfolio with Filter (data attributes)
+8. Tabs Component
+9. Accordion / FAQ
+10. Form with ALL Input Types
+11. Multimedia (image, video, audio)
+12. Modal / Popup
+13. Todo List (dynamic JS)
+14. Color Changer (dynamic styling)
+15. Calculator
+16. Footer (semantic footer)
+17. Back to Top Button
+18. Script Link
+-->
+
+<!-- ============================================================
+     1. DOCTYPE & BOILERPLATE
+     ============================================================
+     <!DOCTYPE html> tells the browser this is an HTML5 document.
+     Without it, browser enters "quirks mode" and renders incorrectly.
+-->
+<!DOCTYPE html>
+
+<!-- 
+    <html> is the ROOT element — everything goes inside it.
+    lang="en" tells search engines and screen readers the language.
+    WHY: Accessibility (screen readers pronounce words correctly)
+         SEO (Google knows what language your content is in)
+-->
+<html lang="en">
+
+<!-- 
+    <head> contains META information — NOT visible on the page.
+    It tells the browser HOW to render the page.
+-->
+<head>
+    <!-- 
+        charset="UTF-8" defines character encoding.
+        UTF-8 supports ALL characters: English, Hindi, Chinese, emojis 🎉
+        WHY: Without it, special characters may display as garbage (Ã¼ instead of ü)
+    -->
+    <meta charset="UTF-8">
+
+    <!-- 
+        viewport meta tag — CRITICAL for responsive design.
+        width=device-width → page width = device screen width
+        initial-scale=1.0 → no zoom on load
+        WHY: Without this, mobile browsers zoom out to fit desktop layout,
+             making everything tiny and unreadable on phones.
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- 
+        <title> shows in the browser tab and search engine results.
+        WHY: SEO — Google uses this as the clickable headline.
+             UX — users identify your tab among many open tabs.
+    -->
+    <title>Complete HTML CSS JS Reference</title>
+
+    <!-- 
+        <link> connects an external CSS file.
+        rel="stylesheet" → relationship is "stylesheet"
+        href="style.css" → path to the CSS file
+        WHY: External CSS is best practice:
+             - Separation of concerns (structure vs style)
+             - One CSS file can style multiple pages
+             - Browser caches it (faster subsequent loads)
+    -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- 
+        Google Fonts (optional) — load custom fonts
+        This loads the "Poppins" font with weights 300, 400, 600, 700
+    -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<!-- 
+    <body> contains ALL visible content.
+    Everything the user sees goes inside <body>.
+    The script tag goes at the BOTTOM of body so HTML loads first.
+-->
+<body>
+
+    <!-- ============================================================
+         2. NAVBAR — Semantic: <header> + <nav>
+         ============================================================
+         <header> = top-level banner/introductory content
+         <nav>    = navigation links
+         
+         Semantic HTML helps:
+         - Screen readers: "This is navigation, skip to main content"
+         - SEO: Google understands your page structure
+         - Developers: Code is self-documenting
+    -->
+    <header>
+        <nav class="navbar" id="navbar">
+            <!-- 
+                Logo — an <a> tag so clicking it goes to homepage.
+                <span> inside for different color styling on part of text.
+            -->
+            <a href="#home" class="logo">
+                Learn<span>Hub</span>
+            </a>
+
+            <!-- 
+                Navigation Links — <ul> with <li> items.
+                We remove default bullets with CSS (list-style: none).
+                Each <li> contains an <a> (anchor) link.
+                href="#sectionId" creates internal page links (smooth scroll).
+                class="active" marks the current page/section.
+            -->
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#portfolio">Portfolio</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+
+            <!-- 
+                Dark Mode Toggle Button
+                This will be handled by JavaScript to toggle dark-mode class on body.
+            -->
+            <button class="dark-toggle" id="darkToggle" title="Toggle Dark Mode">🌙</button>
+
+            <!-- 
+                Hamburger Menu Button — visible only on mobile (hidden on desktop via CSS).
+                Three <span> elements create the three horizontal lines.
+                JavaScript toggles a class to show/hide the mobile menu.
+                aria-label for accessibility — screen readers say "Menu"
+            -->
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+
+    <!-- ============================================================
+         3. HERO SECTION
+         ============================================================
+         <section> = thematic grouping of content.
+         id="home" allows the navbar link href="#home" to scroll here.
+         
+         Hero = the big, full-screen intro area of a website.
+         Usually contains: heading, subtext, call-to-action buttons.
+    -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <!-- 
+                <h1> = most important heading (only ONE per page ideally).
+                SEO: Google uses <h1> to understand what the page is about.
+            -->
+            <h1>Master Web Development</h1>
+
+            <!-- <p> = paragraph text for descriptions -->
+            <p>Learn HTML, CSS, and JavaScript with this complete interactive reference guide.</p>
+
+            <!-- 
+                Buttons — <a> tags styled as buttons.
+                class="btn" = base button styles.
+                class="btn-primary" = filled/solid button.
+                class="btn-outline" = transparent with border.
+            -->
+            <div class="hero-buttons">
+                <a href="#services" class="btn btn-primary">Explore</a>
+                <a href="#contact" class="btn btn-outline">Contact</a>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         4. SERVICES SECTION — Card Grid
+         ============================================================
+         Demonstrates: section, heading hierarchy, CSS Grid cards
+    -->
+    <section class="services" id="services">
+        <!-- Section header with title and subtitle -->
+        <div class="section-header">
+            <h2 class="section-title">Our Services</h2>
+            <p class="section-subtitle">What we offer to help you grow</p>
+        </div>
+
+        <!-- 
+            Card Grid Container — CSS Grid will arrange these.
+            Each card has an icon, title, and description.
+        -->
+        <div class="services-grid">
+            <!-- Card 1 -->
+            <div class="service-card">
+                <div class="service-icon">🎨</div>
+                <h3>UI/UX Design</h3>
+                <p>Creating intuitive and beautiful user interfaces that delight users.</p>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="service-card">
+                <div class="service-icon">💻</div>
+                <h3>Web Development</h3>
+                <p>Building fast, responsive, and modern websites with clean code.</p>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="service-card">
+                <div class="service-icon">📱</div>
+                <h3>Mobile Apps</h3>
+                <p>Native and cross-platform mobile applications for any device.</p>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="service-card">
+                <div class="service-icon">🚀</div>
+                <h3>SEO & Marketing</h3>
+                <p>Growing your online presence and driving organic traffic.</p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         5. ABOUT SECTION — Demonstrates <article> and <aside>
+         ============================================================
+         <article> = self-contained content that could stand alone.
+         <aside>   = content tangentially related (sidebar info).
+         <figure>  = image with caption.
+         <figcaption> = caption for the figure.
+    -->
+    <section class="about" id="about">
+        <div class="section-header">
+            <h2 class="section-title">About Us</h2>
+            <p class="section-subtitle">Learn more about our story</p>
+        </div>
+
+        <div class="about-container">
+            <!-- Article — main content, self-contained -->
+            <article class="about-content">
+                <h3>Our Mission</h3>
+                <p>We are passionate about teaching web development to everyone.
+                   Our goal is to make learning <strong>HTML</strong>,
+                   <em>CSS</em>, and <mark>JavaScript</mark> accessible and fun.</p>
+
+                <!-- 
+                    <figure> wraps an image with its caption.
+                    <img> attributes:
+                    - src: image URL/path
+                    - alt: description for screen readers and when image fails to load
+                    - class: for CSS styling
+                    - loading="lazy": loads image only when user scrolls near it (performance!)
+                -->
+                <figure>
+                    <img src="https://via.placeholder.com/600x300/007bff/ffffff?text=Our+Team"
+                         alt="Our team working together"
+                         class="about-image"
+                         loading="lazy">
+                    <figcaption>Our team at the annual hackathon, 2025</figcaption>
+                </figure>
+
+                <p>Founded in 2020, we have helped over
+                   <strong>10,000 students</strong> launch their careers in tech.</p>
+            </article>
+
+            <!-- Aside — sidebar/supplementary information -->
+            <aside class="about-sidebar">
+                <h4>Quick Facts</h4>
+                <ul class="fact-list">
+                    <li>📅 Founded: 2020</li>
+                    <li>👥 Team: 25 members</li>
+                    <li>🌍 Students: 10,000+</li>
+                    <li>🏆 Awards: 12</li>
+                    <li>📍 Location: Global</li>
+                </ul>
+
+                <!-- 
+                    <details> and <summary> — native HTML accordion!
+                    Click summary to expand/collapse without JavaScript.
+                -->
+                <details>
+                    <summary>Read our full story →</summary>
+                    <p>We started as a small blog sharing web development tutorials.
+                       Today, we are a global education platform trusted by thousands.
+                       Our curriculum covers everything from HTML basics to advanced
+                       JavaScript frameworks.</p>
+                </details>
+            </aside>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         6. STATS COUNTER SECTION
+         ============================================================
+         Demonstrates: data attributes (data-target), 
+         JavaScript counter animation triggered on scroll.
+    -->
+    <section class="stats">
+        <!-- 
+            data-target is a CUSTOM DATA ATTRIBUTE.
+            HTML: data-target="150"
+            JS:   element.dataset.target → "150"
+            WHY:  Pass data from HTML to JavaScript.
+        -->
+        <div class="stat">
+            <h3 class="counter" data-target="150">0</h3>
+            <p>Projects Done</p>
+        </div>
+        <div class="stat">
+            <h3 class="counter" data-target="80">0</h3>
+            <p>Happy Clients</p>
+        </div>
+        <div class="stat">
+            <h3 class="counter" data-target="12">0</h3>
+            <p>Awards Won</p>
+        </div>
+        <div class="stat">
+            <h3 class="counter" data-target="5">0</h3>
+            <p>Years Experience</p>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         7. PORTFOLIO WITH FILTER
+         ============================================================
+         Demonstrates: data-filter, data-category attributes,
+         JavaScript filtering with classList and display manipulation.
+    -->
+    <section class="portfolio" id="portfolio">
+        <div class="section-header">
+            <h2 class="section-title">Portfolio</h2>
+            <p class="section-subtitle">Our recent work</p>
+        </div>
+
+        <!-- 
+            Filter Buttons — data-filter attribute stores the category value.
+            JavaScript reads this to show/hide matching items.
+        -->
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="web">Web</button>
+            <button class="filter-btn" data-filter="app">App</button>
+            <button class="filter-btn" data-filter="design">Design</button>
+        </div>
+
+        <!-- 
+            Portfolio Grid — each item has data-category.
+            JavaScript compares data-filter with data-category.
+        -->
+        <div class="portfolio-grid">
+            <div class="portfolio-item" data-category="web">
+                <img src="https://via.placeholder.com/400x300/FF6B6B/fff?text=Web+Project+1" alt="Web Project">
+                <div class="portfolio-overlay">
+                    <h4>E-Commerce Site</h4>
+                    <p>Web Development</p>
+                </div>
+            </div>
+            <div class="portfolio-item" data-category="app">
+                <img src="https://via.placeholder.com/400x300/4ECDC4/fff?text=Mobile+App" alt="Mobile App">
+                <div class="portfolio-overlay">
+                    <h4>Fitness Tracker</h4>
+                    <p>App Development</p>
+                </div>
+            </div>
+            <div class="portfolio-item" data-category="design">
+                <img src="https://via.placeholder.com/400x300/45B7D1/fff?text=Brand+Design" alt="Design">
+                <div class="portfolio-overlay">
+                    <h4>Brand Identity</h4>
+                    <p>Graphic Design</p>
+                </div>
+            </div>
+            <div class="portfolio-item" data-category="web">
+                <img src="https://via.placeholder.com/400x300/96CEB4/fff?text=Web+Project+2" alt="Web Project 2">
+                <div class="portfolio-overlay">
+                    <h4>Portfolio Site</h4>
+                    <p>Web Development</p>
+                </div>
+            </div>
+            <div class="portfolio-item" data-category="design">
+                <img src="https://via.placeholder.com/400x300/DDA0DD/fff?text=Logo+Design" alt="Logo Design">
+                <div class="portfolio-overlay">
+                    <h4>Logo Design</h4>
+                    <p>Graphic Design</p>
+                </div>
+            </div>
+            <div class="portfolio-item" data-category="app">
+                <img src="https://via.placeholder.com/400x300/F7DC6F/333?text=Chat+App" alt="Chat App">
+                <div class="portfolio-overlay">
+                    <h4>Chat Application</h4>
+                    <p>App Development</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         8. TABS COMPONENT
+         ============================================================
+         Demonstrates: data-tab attribute, classList manipulation,
+         showing/hiding content panels.
+    -->
+    <section class="tabs-section">
+        <div class="section-header">
+            <h2 class="section-title">Our Skills</h2>
+            <p class="section-subtitle">Click tabs to explore</p>
+        </div>
+
+        <div class="tabs-container">
+            <!-- Tab Buttons — data-tab links to panel id -->
+            <div class="tab-buttons">
+                <button class="tab-btn active" data-tab="tab-html">HTML</button>
+                <button class="tab-btn" data-tab="tab-css">CSS</button>
+                <button class="tab-btn" data-tab="tab-js">JavaScript</button>
+            </div>
+
+            <!-- Tab Panels — id matches data-tab value -->
+            <div class="tab-panel active" id="tab-html">
+                <h3>HTML5</h3>
+                <p>HTML (HyperText Markup Language) is the skeleton of every web page.
+                   We use semantic elements like <code>&lt;header&gt;</code>,
+                   <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>,
+                   <code>&lt;section&gt;</code>, <code>&lt;article&gt;</code>,
+                   and <code>&lt;footer&gt;</code> to structure content meaningfully.</p>
+            </div>
+            <div class="tab-panel" id="tab-css">
+                <h3>CSS3</h3>
+                <p>CSS (Cascading Style Sheets) is the skin of the website. We use
+                   Flexbox for one-dimensional layouts, Grid for two-dimensional layouts,
+                   and media queries for responsive design across all screen sizes.</p>
+            </div>
+            <div class="tab-panel" id="tab-js">
+                <h3>JavaScript</h3>
+                <p>JavaScript adds interactivity — the brain of the website.
+                   We handle events like clicks, form submissions, and keyboard input.
+                   We manipulate the DOM to create dynamic, interactive experiences.</p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         9. ACCORDION / FAQ
+         ============================================================
+         Demonstrates: JavaScript toggling max-height for smooth expand/collapse.
+    -->
+    <section class="faq-section">
+        <div class="section-header">
+            <h2 class="section-title">FAQ</h2>
+            <p class="section-subtitle">Frequently asked questions</p>
+        </div>
+
+        <div class="accordion" id="accordion">
+            <div class="accordion-item">
+                <button class="accordion-header">
+                    What is Semantic HTML?
+                    <span class="accordion-icon">+</span>
+                </button>
+                <div class="accordion-body">
+                    <p>Semantic HTML uses meaningful tags like &lt;header&gt;, &lt;nav&gt;,
+                       &lt;main&gt;, &lt;article&gt;, &lt;aside&gt;, and &lt;footer&gt;
+                       instead of generic &lt;div&gt; tags. This helps search engines,
+                       screen readers, and developers understand the page structure.</p>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <button class="accordion-header">
+                    What is the CSS Box Model?
+                    <span class="accordion-icon">+</span>
+                </button>
+                <div class="accordion-body">
+                    <p>Every HTML element is a box with four layers:
+                       Content (your text/image), Padding (space inside border),
+                       Border (the visible edge), and Margin (space outside border).
+                       Always use <code>box-sizing: border-box</code> so width includes
+                       padding and border.</p>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <button class="accordion-header">
+                    Flexbox vs Grid — when to use which?
+                    <span class="accordion-icon">+</span>
+                </button>
+                <div class="accordion-body">
+                    <p>Use <strong>Flexbox</strong> for one-dimensional layouts
+                       (items in a row OR column) — navbars, centering, button groups.
+                       Use <strong>Grid</strong> for two-dimensional layouts
+                       (rows AND columns) — page layouts, card grids, dashboards.
+                       You can nest them: Grid for page layout, Flexbox inside each area.</p>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <button class="accordion-header">
+                    What is Event Delegation?
+                    <span class="accordion-icon">+</span>
+                </button>
+                <div class="accordion-body">
+                    <p>Instead of adding event listeners to every child element,
+                       add ONE listener to the parent and use <code>e.target</code>
+                       to determine which child was clicked. Benefits: fewer listeners
+                       (better performance), works for dynamically added elements.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         10. MAIN CONTENT — <main> tag
+         ============================================================
+         <main> = primary content of the page. Only ONE per page.
+         Helps screen readers skip to main content.
+    -->
+    <main>
+
+        <!-- ============================================================
+             10a. COMPLETE FORM — Every Input Type
+             ============================================================
+             <form> groups input elements for data collection.
+             action="/submit" → WHERE data goes (server URL)
+             method="POST"   → HOW data is sent (POST = secure body, GET = in URL)
+             id="contactForm" → for JavaScript to select and handle
+        -->
+        <section class="contact" id="contact">
+            <div class="section-header">
+                <h2 class="section-title">Contact Us</h2>
+                <p class="section-subtitle">Fill out the form — see live validation</p>
+            </div>
+
+            <div class="contact-container">
+                <!-- Contact Info Side -->
+                <div class="contact-info">
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <div>
+                            <h4>Address</h4>
+                            <p>123 Web Street, Internet City</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📧</span>
+                        <div>
+                            <h4>Email</h4>
+                            <p>hello@learnhub.com</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">📞</span>
+                        <div>
+                            <h4>Phone</h4>
+                            <p>+1 234 567 890</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- The Form -->
+                <form id="contactForm" class="contact-form" action="#" method="POST">
+
+                    <!-- TEXT INPUT — for names, short text -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <!--
+                                <label> describes the input.
+                                for="name" MUST match the input's id="name".
+                                WHY: Clicking the label focuses/selects the input.
+                                     Screen readers announce: "Name, text input"
+                            -->
+                            <label for="name">Full Name *</label>
+                            <!--
+                                type="text" → single-line text input
+                                id="name"   → unique identifier (matches label's for)
+                                name="name" → key when data is submitted
+                                placeholder → grey hint text inside input
+                                required    → browser won't submit without this
+                                minlength   → minimum characters needed
+                                maxlength   → maximum characters allowed
+                                autofocus   → cursor starts here on page load
+                            -->
+                            <input type="text" id="name" name="name"
+                                   placeholder="John Doe"
+                                   required minlength="2" maxlength="50"
+                                   autofocus>
+                            <!-- Error message container — JS fills this -->
+                            <span class="error-message" id="nameError"></span>
+                        </div>
+
+                        <!-- EMAIL INPUT — validates email format automatically -->
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <!--
+                                type="email" → browser checks for @ and domain
+                                Shows email keyboard on mobile devices
+                            -->
+                            <input type="email" id="email" name="email"
+                                   placeholder="john@example.com" required>
+                            <span class="error-message" id="emailError"></span>
+                        </div>
+                    </div>
+
+                    <!-- PASSWORD INPUT — masks characters -->
+                    <div class="form-group">
+                        <label for="password">Password *</label>
+                        <div class="password-wrapper">
+                            <!--
+                                type="password" → shows dots instead of characters
+                                JS can toggle type to "text" to show/hide password
+                            -->
+                            <input type="password" id="password" name="password"
+                                   placeholder="Min 8 characters" required minlength="8">
+                            <button type="button" class="toggle-password" id="togglePassword">👁️</button>
+                        </div>
+                        <!-- Password strength meter -->
+                        <div class="strength-bar">
+                            <div class="strength-fill" id="strengthFill"></div>
+                        </div>
+                        <span class="error-message" id="passwordError"></span>
+                    </div>
+
+                    <!-- NUMBER INPUT -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="age">Age</label>
+                            <!--
+                                type="number" → only accepts numbers, shows up/down arrows
+                                min/max → valid range
+                                step → increment value (step="0.1" for decimals)
+                            -->
+                            <input type="number" id="age" name="age"
+                                   min="18" max="120" placeholder="25">
+                        </div>
+
+                        <!-- TEL INPUT — phone number -->
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <!--
+                                type="tel" → shows phone keyboard on mobile
+                                pattern → regex validation pattern
+                            -->
+                            <input type="tel" id="phone" name="phone"
+                                   placeholder="+1-234-567-8900">
+                        </div>
+                    </div>
+
+                    <!-- DATE INPUT -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="dob">Date of Birth</label>
+                            <!-- type="date" → shows date picker -->
+                            <input type="date" id="dob" name="dob">
+                        </div>
+
+                        <!-- URL INPUT -->
+                        <div class="form-group">
+                            <label for="website">Website</label>
+                            <!-- type="url" → validates URL format -->
+                            <input type="url" id="website" name="website"
+                                   placeholder="https://yoursite.com">
+                        </div>
+                    </div>
+
+                    <!-- COLOR INPUT — color picker -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="favcolor">Favorite Color</label>
+                            <!--
+                                type="color" → opens color picker
+                                value="#007bff" → default color
+                                JS: colorInput.value returns "#hexcode"
+                            -->
+                            <input type="color" id="favcolor" name="favcolor" value="#007bff">
+                            <span class="color-display" id="colorDisplay">#007bff</span>
+                        </div>
+
+                        <!-- RANGE INPUT — slider -->
+                        <div class="form-group">
+                            <label for="satisfaction">
+                                Satisfaction: <span id="rangeValue">5</span>/10
+                            </label>
+                            <!--
+                                type="range" → slider control
+                                min/max → range limits
+                                value → starting position
+                                JS: 'input' event fires while dragging
+                            -->
+                            <input type="range" id="satisfaction" name="satisfaction"
+                                   min="1" max="10" value="5">
+                        </div>
+                    </div>
+
+                    <!-- RADIO BUTTONS — select ONE option -->
+                    <div class="form-group">
+                        <p class="form-label">Gender:</p>
+                        <div class="radio-group">
+                            <!--
+                                type="radio" → circular selector, only ONE per group
+                                name="gender" → SAME name = same group (only one selectable)
+                                value="male" → value sent when form submits
+                                required on first one → requires selection
+                                JS: document.querySelector('input[name="gender"]:checked').value
+                            -->
+                            <label class="radio-label">
+                                <input type="radio" name="gender" value="male" required>
+                                Male
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="gender" value="female">
+                                Female
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="gender" value="other">
+                                Other
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- CHECKBOXES — select MULTIPLE options -->
+                    <div class="form-group">
+                        <p class="form-label">Skills:</p>
+                        <div class="checkbox-group">
+                            <!--
+                                type="checkbox" → square selector, multiple selectable
+                                name="skills" → same name groups them
+                                value="html" → value when checked
+                                checked → pre-selected
+                                JS: checkbox.checked → true/false
+                                JS: document.querySelectorAll('input[name="skills"]:checked')
+                            -->
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="skills" value="html" checked>
+                                HTML
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="skills" value="css" checked>
+                                CSS
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="skills" value="js">
+                                JavaScript
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="skills" value="react">
+                                React
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- SELECT / DROPDOWN -->
+                    <div class="form-group">
+                        <label for="country">Country</label>
+                        <!--
+                            <select> creates a dropdown menu.
+                            <option> defines each choice.
+                            disabled selected → placeholder option
+                            value="" → no value for placeholder
+                            JS: select.value → selected option's value
+                            JS: select.options[select.selectedIndex].text → visible text
+                        -->
+                        <select id="country" name="country" required>
+                            <option value="" disabled selected>Choose your country...</option>
+                            <option value="us">United States</option>
+                            <option value="uk">United Kingdom</option>
+                            <option value="in">India</option>
+                            <option value="ca">Canada</option>
+                            <option value="au">Australia</option>
+                        </select>
+                    </div>
+
+                    <!-- TEXTAREA — multi-line text -->
+                    <div class="form-group">
+                        <label for="message">
+                            Message * <span class="char-count" id="charCount">0/500</span>
+                        </label>
+                        <!--
+                            <textarea> = multi-line text input (unlike <input> which is single-line)
+                            rows → visible height (in text lines)
+                            maxlength → character limit
+                            JS: textarea.value → full text content
+                        -->
+                        <textarea id="message" name="message" rows="5"
+                                  placeholder="Your message here..." required maxlength="500"></textarea>
+                    </div>
+
+                    <!-- FILE INPUT -->
+                    <div class="form-group">
+                        <label for="avatar">Upload Avatar</label>
+                        <!--
+                            type="file" → file upload
+                            accept="image/*" → only accept image files
+                            JS: fileInput.files[0] → selected file object
+                            JS: file.name, file.size, file.type
+                        -->
+                        <input type="file" id="avatar" name="avatar" accept="image/*">
+                        <!-- Image preview will be shown here by JS -->
+                        <img id="avatarPreview" class="avatar-preview" alt="" style="display:none;">
+                    </div>
+
+                    <!-- HIDDEN INPUT — sends data user doesn't see -->
+                    <!--
+                        type="hidden" → not visible but submitted with form
+                        WHY: send form metadata, CSRF tokens, form identification
+                    -->
+                    <input type="hidden" name="formType" value="contact">
+
+                    <!-- SUBMIT AND RESET BUTTONS -->
+                    <div class="form-buttons">
+                        <!--
+                            type="submit" → submits the form (triggers 'submit' event)
+                            type="reset"  → clears all inputs to default values
+                            type="button" → does nothing by default (needs JS)
+                        -->
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                        <button type="reset" class="btn btn-secondary">Clear Form</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Form result display area — JS fills this -->
+            <div id="formResult" class="form-result"></div>
+        </section>
+
+
+        <!-- ============================================================
+             11. MULTIMEDIA — Image, Video, Audio
+             ============================================================
+        -->
+        <section class="multimedia-section">
+            <div class="section-header">
+                <h2 class="section-title">Multimedia</h2>
+                <p class="section-subtitle">Images, Video, and Audio</p>
+            </div>
+
+            <div class="media-grid">
+                <!-- Responsive Image with Figure -->
+                <figure class="media-item">
+                    <img src="https://via.placeholder.com/600x400/667eea/ffffff?text=Responsive+Image"
+                         alt="A responsive placeholder image"
+                         loading="lazy"
+                         class="responsive-img">
+                    <figcaption>Responsive image — scales with container width</figcaption>
+                </figure>
+
+                <!-- Video Player -->
+                <div class="media-item">
+                    <!--
+                        <video> embeds a video player.
+                        controls → show play/pause/volume controls
+                        poster → thumbnail before playing
+                        muted → start muted (needed for autoplay in most browsers)
+                        preload="metadata" → load only metadata initially
+                        width → video width
+                        <source> → video file (multiple for browser compatibility)
+                        Fallback text shown if browser doesn't support <video>
+                    -->
+                    <video controls muted preload="metadata" width="100%"
+                           poster="https://via.placeholder.com/600x400/4ECDC4/ffffff?text=Video+Poster">
+                        <source src="sample-video.mp4" type="video/mp4">
+                        <source src="sample-video.webm" type="video/webm">
+                        Your browser does not support the video element.
+                    </video>
+                    <p class="media-caption">HTML5 Video with controls</p>
+                </div>
+
+                <!-- Audio Player -->
+                <div class="media-item">
+                    <!--
+                        <audio> embeds an audio player.
+                        controls → show play/pause/volume
+                        preload="none" → don't load until user clicks play
+                    -->
+                    <audio controls preload="none" style="width: 100%;">
+                        <source src="sample-audio.mp3" type="audio/mpeg">
+                        <source src="sample-audio.ogg" type="audio/ogg">
+                        Your browser does not support the audio element.
+                    </audio>
+                    <p class="media-caption">HTML5 Audio player</p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             12. INTERACTIVE COMPONENTS SECTION
+             ============================================================
+        -->
+        <section class="interactive-section">
+            <div class="section-header">
+                <h2 class="section-title">Interactive Components</h2>
+                <p class="section-subtitle">Built with JavaScript</p>
+            </div>
+
+            <div class="components-grid">
+
+                <!-- MODAL TRIGGER -->
+                <div class="component-card">
+                    <h3>Modal / Popup</h3>
+                    <p>Click the button to open a modal dialog.</p>
+                    <button class="btn btn-primary" id="openModal">Open Modal</button>
+                </div>
+
+                <!-- TODO LIST -->
+                <div class="component-card">
+                    <h3>📝 Todo List</h3>
+                    <div class="todo-input-group">
+                        <input type="text" id="todoInput" placeholder="Add a task...">
+                        <button class="btn btn-primary" id="addTodoBtn">+</button>
+                    </div>
+                    <ul class="todo-list" id="todoList"></ul>
+                </div>
+
+                <!-- COLOR CHANGER -->
+                <div class="component-card">
+                    <h3>🎨 Color Changer</h3>
+                    <p>Pick a color to change this card's background:</p>
+                    <input type="color" id="cardColorPicker" value="#ffffff">
+                    <button class="btn btn-secondary" id="randomColorBtn">🎲 Random</button>
+                    <div class="color-result" id="colorResult">#ffffff</div>
+                </div>
+
+                <!-- COUNTER -->
+                <div class="component-card">
+                    <h3>Counter</h3>
+                    <div class="counter-display" id="counterDisplay">0</div>
+                    <div class="counter-buttons">
+                        <button class="btn btn-primary" id="decrementBtn">−</button>
+                        <button class="btn btn-secondary" id="resetCounterBtn">Reset</button>
+                        <button class="btn btn-primary" id="incrementBtn">+</button>
+                    </div>
+                </div>
+
+                <!-- DIGITAL CLOCK -->
+                <div class="component-card">
+                    <h3>🕐 Digital Clock</h3>
+                    <div class="clock-display" id="clockDisplay">00:00:00</div>
+                    <div class="clock-date" id="clockDate"></div>
+                </div>
+
+                <!-- SEARCH FILTER -->
+                <div class="component-card">
+                    <h3>🔍 Search Filter</h3>
+                    <input type="text" id="searchInput" placeholder="Search languages...">
+                    <ul class="search-list" id="searchList">
+                        <li class="search-item">HTML</li>
+                        <li class="search-item">CSS</li>
+                        <li class="search-item">JavaScript</li>
+                        <li class="search-item">Python</li>
+                        <li class="search-item">React</li>
+                        <li class="search-item">Node.js</li>
+                        <li class="search-item">TypeScript</li>
+                        <li class="search-item">Vue.js</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+
+    <!-- ============================================================
+         13. MODAL (Hidden by default — shown via JS)
+         ============================================================
+    -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <button class="modal-close" id="closeModal">&times;</button>
+            <h2>Welcome! 🎉</h2>
+            <p>This is a modal dialog component. It was opened by JavaScript
+               using <code>classList.add('active')</code>.
+               Click the X, the overlay, or press Escape to close.</p>
+            <button class="btn btn-primary" id="modalConfirm">Got it!</button>
+        </div>
+    </div>
+
+
+    <!-- ============================================================
+         14. FOOTER — Semantic <footer>
+         ============================================================
+         <footer> = bottom of the page or section.
+         Contains: copyright, links, social media, contact info.
+    -->
+    <footer class="footer">
+        <div class="footer-content">
+            <!-- Footer Column 1 — About -->
+            <div class="footer-section">
+                <h3>Learn<span>Hub</span></h3>
+                <p>Your complete reference for HTML, CSS, and JavaScript.
+                   Built for students, by students.</p>
+            </div>
+
+            <!-- Footer Column 2 — Quick Links -->
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#portfolio">Portfolio</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- Footer Column 3 — Resources -->
+            <div class="footer-section">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">Tutorials</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+
+            <!-- Footer Column 4 — Social -->
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                    <a href="#" class="social-icon" title="Facebook">FB</a>
+                    <a href="#" class="social-icon" title="Twitter">TW</a>
+                    <a href="#" class="social-icon" title="Instagram">IG</a>
+                    <a href="#" class="social-icon" title="LinkedIn">LN</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom — copyright -->
+        <div class="footer-bottom">
+            <!--
+                &copy; = © symbol (HTML entity)
+                HTML entities display special characters:
+                &copy; → ©   &amp; → &   &lt; → <   &gt; → >
+                &nbsp; → non-breaking space   &hearts; → ♥
+            -->
+            <p>&copy; 2025 LearnHub. All Rights Reserved. Made with &hearts;</p>
+        </div>
+    </footer>
+
+
+    <!-- ============================================================
+         15. BACK TO TOP BUTTON — Fixed position
+         ============================================================
+    -->
+    <button class="back-to-top" id="backToTop" title="Back to top">↑</button>
+
+
+    <!-- ============================================================
+         16. SCROLL PROGRESS BAR
+         ============================================================
+    -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+
+    <!-- ============================================================
+         17. JAVASCRIPT FILE
+         ============================================================
+         Script tag at BOTTOM of body:
+         WHY: HTML loads and renders first, THEN JS executes.
+         If script was in <head>, it would try to find elements
+         that don't exist yet → errors!
+         
+         Alternative: use defer attribute in <head>:
+         <script src="script.js" defer></script>
+         defer = "download now, execute after HTML is parsed"
+    -->
+    <script src="script.js"></script>
+
+</body>
+</html>

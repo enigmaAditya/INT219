@@ -1,0 +1,28 @@
+<!-- write a js program that demonstrate the use of mouse over pointer as the pointer when goes to the paragraph changes the colour of paragraph and when the pointer is removed its colour restores
+ :
+   -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p id="para" style="font-size: 20px;">Hover over this paragraph to change its color.</p>
+    <script>
+        
+        let paragraph = document.getElementById('para');
+
+        paragraph.addEventListener('mouseover', () => {
+            paragraph.style.color = 'lightgreen'; // Change color on mouse over
+        });
+
+        paragraph.addEventListener('mouseout', () => {
+            paragraph.style.color = ''; // Restore original color on mouse out
+        });
+        </script>
+</body>
+</html>

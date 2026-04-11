@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>My Institution Student Portal</h1>
+    <img src="https://upload.wikimedia.org/wikipedia/en/3/3a/Lovely_Professional_University_logo.png" alt="LPU Logo" title="LPU" width="200" height="200">
+    <h3>Welcome Video</h3>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/u-Rvd0apMlo?si=FqmUNbr-16THpkCM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <h3>Background Music</h3>
+    <audio src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" controls> 
+        Your browser does not support the audio element.
+    </audio>
+    <h3>Student Registration Form</h3>
+    <form action="/register_student" method="post" >
+        <label for="student_name">Name:</label> <br>
+        <input type="text" id="student_name" name="student_name" required><br><br>
+        <label for="student_email">Email:</label><br>
+        <input type="email" id="student_email" name="student_email" required><br><br>
+        <label for="student_age">Age:</label><br>
+        <input type="number" id="student_age" name="student_age" required><br><br>
+        <label for="student_gender">Gender:</label><br>
+        <input type="radio" id="male" name="student_gender" value="male">
+        <label for="male">Male</label><br>
+        <input type="radio" id="female" name="student_gender" value="female">
+        <label for="female">Female</label><br><br>
+        <label for="student_course">Course:</label>
+        <select id ="student_course" name="student_course">
+            <option value="btech">B.Tech</option>
+            <option value="bcom">B.Com</option>
+            <option value="mba">MBA</option>
+        </select><br><br>
+        <button type="submit">Register</button>
+        <button type="reset">Reset</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nav System</title>
+<style>
+    
+body{
+    font-family: Arial;
+}
+.navbar{
+    display:flex;
+    justify-content: center;
+    align-items: flex-start;
+    border:2px solid blueviolet;
+    border-radius:4px;
+    gap:20px;
+    background:blueviolet;
+    padding:10px;
+}
+.nav-item{
+    color:white;
+    cursor:pointer;
+    position:relative;
+}
+
+.submenu{
+    display:none;
+    position:absolute;
+    top:100%;
+    left:0;
+    background:chartreuse;
+    padding:10px;
+    width: max-content;
+    list-style: none;
+}
+
+.submenu li{
+    padding:5px;
+    cursor:pointer;
+}
+.submenu li:hover{
+    background:#ddd;
+}
+.show{
+    display:block;
+}
+
+
+</style>
+</head>
+
+<body>
+
+
+
+<div class="navbar">
+
+    <div class="nav-item">
+    Home
+        <ul class="submenu">
+            <li>Item 1</li>
+            <li>Item 2</li>
+            <li>Item 3</li>
+        </ul>
+    </div>
+
+    <div class="nav-item">
+    Services
+        <ul class="submenu">
+            <li>Item 1</li>
+            <li>Item 2</li>
+            <li>Item 3</li>
+        </ul>
+    </div>
+
+    <div class="nav-item">
+    Products
+        <ul class="submenu">
+            <li>Item 1</li>
+            <li>Item 2</li>
+            <li>Item 3</li>
+        </ul>
+    </div>
+
+    <div class="nav-item">
+    Portfolio
+        <ul class="submenu">
+            <li>Item 1</li>
+            <li>Item 2</li>
+            <li>Item 3</li>
+        </ul>
+    </div>
+
+    <div class="nav-item">
+    Blog
+        <ul class="submenu">
+            <li>Item 1</li>
+            <li>Item 2</li>
+            <li>Item 3</li>
+        </ul>
+    </div>
+
+    <div class="nav-item">
+    Careers
+        <ul class="submenu">
+            <li>Item 1</li>
+            <li>Item 2</li>
+            <li>Item 3</li>
+        </ul>
+    </div>
+
+    <div class="nav-item">
+    Contact
+        <ul class="submenu">
+            <li>Item 1</li>
+            <li>Item 2</li>
+            <li>Item 3</li>
+        </ul>
+    </div>
+
+</div>
+
+<script>
+const navItems = document.querySelectorAll(".nav-item");
+navItems.forEach(item => {
+    item.addEventListener("click", (e) => {
+        const submenu = item.querySelector(".submenu");
+        const isShown = submenu.classList.contains("show");
+
+        document.querySelectorAll(".submenu").forEach(menu=>{
+            menu.classList.remove("show");
+        });
+
+        if (!isShown) {
+            submenu.classList.add("show");
+        }
+    })
+});
+
+</script>
+    
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Portal - Naukri Clone</title>
+    <link rel="stylesheet" href="naukri.css">
+    
+    <!-- Using Google Fonts for better typography like the real site -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="navbar">
+        <div class="nav-left">
+            <a href="#" class="logo">naukri</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#jobs" class="active">Jobs</a></li>
+                <li><a href="#companies">Companies</a></li>
+                <li><a href="#services">Services</a></li>
+            </ul>
+        </div>
+        <div class="nav-middle">
+            <input type="text" class="search-bar" placeholder="search job here">
+        </div>
+            <div class="nav-right">
+            <button class="naukri-360">naukri 360</button>
+            <div class="icon-container bell-container" tabindex="0">
+                <div class="icon bell-icon" data-action="toggle-dropdown" data-target="notificationDropdown" style="font-size: 20px; color: var(--text-gray); cursor: pointer; position: relative;">🔔<span class="notification-badge">3</span></div>
+                <div class="dropdown-menu" id="notificationDropdown">
+                    <div class="dropdown-header">Notifications</div>
+                    <div class="dropdown-item">Someone viewed your profile</div>
+                    <div class="dropdown-item">New job matches for Sales Executive</div>
+                    <div class="dropdown-item">Complete your profile to 100%</div>
+                </div>
+            </div>
+            <div class="icon-container profile-menu-container" tabindex="0">
+                <div class="profile-menu" data-action="toggle-dropdown" data-target="profileDropdown">
+                    <div class="icon hamburger-icon pointer-events-none">≡</div>
+                    <div class="icon user-icon pointer-events-none">👤</div>
+                </div>
+                <div class="dropdown-menu" id="profileDropdown">
+                    <div class="dropdown-header">Aditya KR</div>
+                    <div class="dropdown-item" data-action="toast" data-message="Opening Profile settings...">Profile Settings</div>
+                    <div class="dropdown-item" data-action="toast" data-message="Opening Resume...">My Resume</div>
+                    <hr style="border:0; border-top:1px solid #eee; margin:5px 0;">
+                    <div class="dropdown-item text-danger" data-action="toast" data-message="Logging out...">Logout</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container" id="mainContainer">
+        <!-- Left Sidebar -->
+        <aside class="left-sidebar">
+            <div class="profile-card card">
+                <div class="profile-img-placeholder"></div>
+                <h3>Aditya KR</h3>
+                <div class="completion-bar">23%</div>
+                <div class="missing-details">
+                    <p style="margin-bottom: 8px;"><strong>What are you missing?</strong></p>
+                    <ul>
+                        <li><span>❌</span> Daily job recommendations</li>
+                        <li><span>❌</span> Job application updates</li>
+                        <li><span>❌</span> Direct jobs from recruiters</li>
+                    </ul>
+                    <button style="margin-top: 10px;" class="btn-primary" data-action="complete-profile">Complete profile</button>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu card">
+                <ul>
+                    <li><a href="#" class="active"><span class="icon">🏠</span> My home</a></li>
+                    <li><a href="#"><span class="icon">💼</span> Jobs</a></li>
+                    <li><a href="#"><span class="icon">🏢</span> Companies</a></li>
+                    <li><a href="#"><span class="icon">📝</span> Blogs</a></li>
+                </ul>
+            </nav>
+            <a href="#" class="how-it-works">How Naukri works?</a>
+        </aside>
+
+        <!-- Middle Content -->
+        <main class="middle-content">
+            <!-- Diversity Banner -->
+            <div class="diversity-banner card">
+                <span class="badge">Diversity & inclusion</span>
+                <h2>Companies want to build inclusive teams, help us identify your disability status for better jobs.</h2>
+                <div class="diversity-actions">
+                    <button class="btn-outline" data-action="select-disability" data-value="yes">I have a disability</button>
+                    <button class="btn-outline" data-action="select-disability" data-value="no">I don't have a disability</button>
+                    <button class="btn-disabled" id="submitDisability" disabled data-action="submit-disability">Submit</button>
+                </div>
+            </div>
+
+            <!-- Recommended Jobs -->
+            <div class="recommended-jobs card">
+                <div class="section-header">
+                    <h2>Recommended jobs for you</h2>
+                    <a href="#" class="view-all">View all</a>
+                </div>
+                <div class="tabs" id="jobTabs">
+                    <button class="tab active" data-tab="profile">Profile (74)</button>
+                    <button class="tab" data-tab="preferences">Preferences (0)</button>
+                </div>
+                
+                <div class="jobs-carousel" id="jobsCarousel">
+                    <!-- Job Cards populated dynamically by JS -->
+                </div>
+            </div>
+
+            <!-- Create Resume Banner -->
+            <div class="resume-banner card flex-row">
+                <div class="resume-image" style="display: flex; align-items: center; justify-content: center; font-size: 32px;">📄</div>
+                <div class="resume-text">
+                    <h2>Create your resume in 3 easy steps ✨</h2>
+                    <ol>
+                        <li>Add the missing details in your profile</li>
+                        <li>Choose a template for your resume</li>
+                        <li>Improve the content with AI</li>
+                    </ol>
+                </div>
+                <button class="btn-primary" data-action="create-resume">Create resume</button>
+            </div>
+        </main>
+
+        <!-- Right Sidebar -->
+        <aside class="right-sidebar">
+            <div class="whatsapp-card card">
+                <div class="whatsapp-header">
+                    <div class="whatsapp-icon">WhatsApp</div>
+                </div>
+                <h3>Get updates directly on WhatsApp!</h3>
+                <p>Know instantly when status of your job application changes</p>
+                <button class="btn-whatsapp" data-action="opt-in-whatsapp">Opt-in now</button>
+            </div>
+
+            <div class="ad-card card">
+                <div class="ad-image placeholder">
+                    <div style="text-align: center;">
+                        <div>WHAT WOMEN</div>
+                        <div>PROFESSIONALS WANT</div>
+                    </div>
+                </div>
+                <p><strong>50% women hide marriage & maternity plans amid bias fears</strong></p>
+                <a href="#" class="know-more">Know more</a>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- JS linked at the end of body -->
+    <script src="naukri.js"></script>
+</body>
+</html>

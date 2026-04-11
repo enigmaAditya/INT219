@@ -1,0 +1,60 @@
+<!--create a web oage with twoparagraph to demonstrate setTimeout and setInterval arrow function and mouseover events.
+  paragraph 1(id="timeoutPara")   on hover use settimeout to change the text after   3 seconds and set the colour to blue;
+  paragraph 2(id="intervalPara") on hover use setInterval to update the text every 2 seconds with current time and set the colour to green;
+  on mouseout, stop the interval and reset the text  and colour to default for para2;
+  requirements:
+  use addeventListeners for event handling
+  prevent multiple  intervals from stacking
+  apply smooth colour transition using css: transiyion: color 0.3s ease; -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #timeoutPara, #intervalPara {
+            transition: color 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <p id="timeoutPara">Hover over me to see timeout effect</p>
+    <p id="intervalPara">Hover over me to see interval effect</p>
+    <script>
+        const timeoutPara = document.getElementById('timeoutPara');
+        const intervalPara = document.getElementById('intervalPara');
+        let timeoutId;
+        let intervalId;
+
+        timeoutPara.addEventListener('mouseover', () => {
+            timeoutId = setTimeout(() => {
+                timeoutPara.textContent = "Timeout effect applied!";
+                timeoutPara.style.color = "lightgreen";
+            }, 3000);
+        });
+
+        timeoutPara.addEventListener('mouseout', () => {
+            clearTimeout(timeoutId);
+            timeoutPara.textContent = "Hover over me to see timeout effect";
+            timeoutPara.style.color = "black";
+        });
+
+        intervalPara.addEventListener('mouseover', () => {
+            intervalId = setInterval(() => {
+                const now = new Date();
+                intervalPara.textContent = now.toLocaleTimeString();
+                intervalPara.style.color = "green";
+            }, 2000);
+        });
+
+        intervalPara.addEventListener('mouseout', () => {
+            clearInterval(intervalId);
+            intervalPara.textContent = "Hover over me to see interval effect";
+            intervalPara.style.color = "black";
+        });
+    </script>   
+</body>
+</html>
