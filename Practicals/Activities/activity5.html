@@ -63,9 +63,9 @@
         const addBtn = document.getElementById('addbtn');
         const newTaskInput = document.getElementById('newtask');
         //where is the bubbling part? when we click on delete button the event will bubble up to the task item and then to the task list. we can demonstrate this by adding an event listener to the task item and logging the event target.
-        taskList.addEventListener('click', (e) => {
-            console.log('Task List Clicked:', e.target);
-        });
+        // taskList.addEventListener('click', (e) => {
+        //     console.log('Task List Clicked:', e.target);
+        // });
 
         // // Event delegation for adding tasks
         // addBtn.addEventListener('click', () => {
@@ -79,23 +79,34 @@
         //     }
         // });
         //create a like button for each task item
-         addBtn.addEventListener('click', () => {
-            const taskText = newTaskInput.value.trim();
-            if (taskText) {
-                const taskItem = document.createElement('div');
-                taskItem.className = 'task';
-                taskItem.innerHTML = `${taskText} <button class="likebtn">Like</button> <button class="deletebtn">Delete</button>`;
-                taskList.appendChild(taskItem);
-                newTaskInput.value = '';
-            }
-        });
+        //  addBtn.addEventListener('click', () => {
+        //     const taskText = newTaskInput.value.trim();
+        //     if (taskText) {
+        //         const taskItem = document.createElement('div');
+        //         taskItem.className = 'task';
+        //         taskItem.innerHTML = `${taskText} <button class="likebtn">Like</button> <button class="deletebtn">Delete</button>`;
+        //         taskList.prepend(taskItem);
+        //         newTaskInput.value = '';
+        //     }
+        // });
 
         //eventdelegation for like button
         taskList.addEventListener('click', (e) => {
+            console.log('Task List Clicked:', e.target)
+            if(e.target.id==='addbtn'){
+                const taskText = newTaskInput.value.trim();
+                if (taskText) {
+                    const taskItem = document.createElement('div');
+                    taskItem.className = 'task';
+                    taskItem.innerHTML = `${taskText} <button class="likebtn">Like</button> <button class="deletebtn">Delete</button>`;
+                    taskList.prepend(taskItem);
+                    newTaskInput.value = '';
+                }
+            }
             if (e.target.classList.contains('likebtn')) {
                 e.target.textContent = 'Liked';
                 e.target.style.backgroundColor = 'lightgreen';
-                e.appendChild(e.target); // Move the like button to the end of the task item
+                taskList.appendChild(e.target.parentElement); // Move the like button to the end of the task item
             }
         });
 
@@ -104,7 +115,7 @@
             if (e.target.classList.contains('deletebtn')) {
                 e.target.parentElement.remove();
             }
-        });
+        }, true);
         //event delegt
     </script>
     

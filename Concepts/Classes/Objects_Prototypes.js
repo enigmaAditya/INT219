@@ -333,3 +333,7 @@ fetchData();
 // try...catch block is used to handle errors in JS, it allows us to write code that can handle exceptions gracefully, preventing the program from crashing and providing a way to recover from errors. The code that may throw an error is placed inside the try block, and if an error occurs, it is caught by the catch block, where we can handle the error appropriately (e.g., logging it, showing a user-friendly message, etc.).
 // you want to stop on the first error and not execute the remaining code, you can use return statement in the catch block to exit the function immediately after handling the error. This way, if an error occurs, the function will stop executing further code and return control to the caller.
 
+// difference between promise and async/await
+// Promise: It is a fundamental concept in JavaScript for handling asynchronous operations. It is a built-in object that represents the eventual completion or failure of an asynchronous operation and its resulting value. A promise can be in one of three states: pending, fulfilled, or rejected. 
+// Async/await: It is a syntactic sugar over promises, it allows us to write asynchronous code in a synchronous manner, making it easier to read and maintain, it also allows us to handle errors using try/catch blocks, it also allows us to chain multiple asynchronous operations together, ensuring that they are executed in a sequential order.
+// Async/await syntax:

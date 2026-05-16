@@ -30,6 +30,6 @@ async function getWeatherData(location){
         return displaydata;
     }
     catch(error){
-        console.log("")
+        console.log("Error fetching weather data: ", error);
     }
 }

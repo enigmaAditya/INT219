@@ -1,0 +1,50 @@
+<!-- design a responsve layout using media queries: 
+ create a container with 3 boxes
+ uses flexbox for layout
+ Apply a media query to:
+    change flex-direction from column to row
+    align items to the center on larger screens -->
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="URF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Responsive Page</title>
+        <style>
+            .box {
+                width: 100px;
+                height: 100px;
+                background-color: lightblue;
+                margin: 10px;
+            }
+
+            main {
+                display: flex;
+                flex-direction: column; /* Stack boxes vertically */
+                align-items: flex-start; /* Align items to the start */
+            }
+
+            /* Media query for larger screens */
+            @media (min-width: 600px) {
+                main {
+                    flex-direction: row; /* Arrange boxes in a row */
+                    align-items: center; /* Center items vertically */
+                }
+            }
+
+        </style>
+    </head>
+    <body>
+        <main>
+            <div class="box">Box 1</div>
+            <div class="box">Box 2</div>
+            <div class="box">Box 3</div>
+        </main>
+
+    </body>
+</html>
+
+
+
+

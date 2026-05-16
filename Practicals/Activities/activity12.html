@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        div { padding: 30px; border: 2px solid black; }
+        #outer { background: lightcoral; }
+        #middle { background: lightblue; }
+        #inner { background: lightgreen; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div id="outer"> Outer
+        <div id="middle"> Middle
+            <div id="inner"> Inner (Click Me) </div>
+        </div>
+    </div>
+
+    <script>
+        const outer = document.getElementById('outer');
+        const middle = document.getElementById('middle');
+        const inner = document.getElementById('inner');
+
+        // --- BUBBLING (Starts from Inner to Outer) ---
+        // Passing 'false' (or nothing) makes it use Bubbling
+        inner.addEventListener('click', () => console.log('1. Inner (Bubbling)'), false);
+        middle.addEventListener('click', () => console.log('2. Middle (Bubbling)'), false);
+        outer.addEventListener('click', () => console.log('3. Outer (Bubbling)'), false);
+
+        // --- CAPTURING (Starts from Outer to Inner) ---
+        // Passing 'true' makes it use Capturing
+        outer.addEventListener('click', () => console.log('A. Outer (Capturing)'), true);
+        middle.addEventListener('click', () => console.log('B. Middle (Capturing)'), true);
+        inner.addEventListener('click', () => console.log('C. Inner (Capturing)'), true);
+    </script>
+</body>
+</html>

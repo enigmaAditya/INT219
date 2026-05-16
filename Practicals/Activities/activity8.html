@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Comment Section</title>
+    <style>
+        :root {
+            --bg: radial-gradient(circle at 15% 20%, rgba(255, 0, 153, 0.26), transparent 24%),
+                radial-gradient(circle at 85% 12%, rgba(0, 245, 255, 0.24), transparent 20%),
+                radial-gradient(circle at 20% 82%, rgba(255, 0, 153, 0.12), transparent 22%),
+                radial-gradient(circle at 88% 78%, rgba(0, 245, 255, 0.14), transparent 22%),
+                linear-gradient(135deg, #070816 0%, #11132a 45%, #0d1020 100%);
+            --panel: rgba(10, 13, 32, 0.72);
+            --panel-strong: rgba(14, 18, 39, 0.94);
+            --text: #f4f7ff;
+            --muted: #a2add8;
+            --line: rgba(99, 119, 255, 0.28);
+            --primary: #ff2ea6;
+            --primary-dark: #e00087;
+            --secondary: #00f5ff;
+            --accent: #00f5ff;
+            --shadow: 0 28px 80px rgba(0, 0, 0, 0.45);
+            --radius-lg: 28px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            padding: 32px 16px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            filter: blur(18px);
+            opacity: 0.5;
+            z-index: -1;
+            animation: floatOrb 10s ease-in-out infinite;
+        }
+
+        body::before {
+            top: 70px;
+            left: -70px;
+            background: radial-gradient(circle, rgba(255, 46, 166, 0.55), transparent 68%);
+        }
+
+        body::after {
+            right: -80px;
+            bottom: 40px;
+            background: radial-gradient(circle, rgba(0, 245, 255, 0.4), transparent 70%);
+            animation-delay: -4s;
+        }
+
+        .shell {
+            max-width: 920px;
+            margin: 0 auto;
+        }
+
+        .hero {
+            background:
+                radial-gradient(circle at 12% 24%, rgba(0, 245, 255, 0.24), transparent 16%),
+                radial-gradient(circle at 84% 22%, rgba(255, 46, 166, 0.2), transparent 12%),
+                linear-gradient(135deg, #1a1d42 0%, #00f5ff 42%, #ff2ea6 100%);
+            color: #f9fffe;
+            border-radius: 36px;
+            padding: 34px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .hero::before,
+        .hero::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+        }
+
+        .hero::before {
+            inset: -65px auto auto -30px;
+            width: 180px;
+            height: 180px;
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 60px rgba(0, 245, 255, 0.18);
+        }
+
+        .hero::after {
+            inset: auto -60px -100px auto;
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 70px rgba(255, 46, 166, 0.28);
+        }
+
+        .hero h1,
+        .hero p,
+        .hero-badges,
+        .hero-stats {
+            position: relative;
+            z-index: 1;
+            margin: 0;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 4vw, 3.4rem);
+            line-height: 0.96;
+            letter-spacing: 0.01em;
+            font-family: Georgia, "Times New Roman", serif;
+            max-width: 620px;
+        }
+
+        .hero p {
+            margin-top: 14px;
+            max-width: 640px;
+            color: rgba(240, 250, 255, 0.86);
+            font-size: 1.02rem;
+            line-height: 1.6;
+        }
+
+        .hero-badges,
+        .hero-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .hero-badges {
+            margin-bottom: 18px;
+        }
+
+        .hero-badge,
+        .stat-pill {
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: rgba(10, 13, 32, 0.28);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            font-size: 0.95rem;
+            box-shadow: 0 0 24px rgba(0, 245, 255, 0.1);
+        }
+
+        .hero-stats {
+            margin-top: 22px;
+        }
+
+        .comment-app {
+            margin-top: -40px;
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            background: var(--panel);
+            backdrop-filter: blur(16px);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            position: relative;
+        }
+
+        .comment-app::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255, 46, 166, 0.68), rgba(0, 245, 255, 0.62));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        .composer,
+        .comment-card,
+        .reply-composer {
+            background: var(--panel-strong);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-md);
+        }
+
+        .composer {
+            padding: 20px;
+            background:
+                linear-gradient(180deg, rgba(21, 26, 52, 0.96), rgba(9, 13, 30, 0.98)),
+                var(--panel-strong);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 30px rgba(0, 245, 255, 0.08);
+        }
+
+        .section-label {
+            margin: 0 0 8px;
+            color: var(--accent);
+            font-size: 0.92rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 110px;
+            resize: vertical;
+            border: 1px solid rgba(0, 245, 255, 0.24);
+            border-radius: 18px;
+            padding: 16px 18px;
+            font: inherit;
+            color: var(--text);
+            background: linear-gradient(180deg, rgba(7, 10, 24, 0.98), rgba(17, 22, 45, 0.98));
+            box-shadow: inset 0 0 0 1px rgba(255, 46, 166, 0.06);
+        }
+
+        textarea:focus,
+        input:focus {
+            outline: 3px solid rgba(255, 46, 166, 0.16);
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 4px rgba(0, 245, 255, 0.08), 0 0 24px rgba(255, 46, 166, 0.14);
+        }
+
+        textarea::placeholder {
+            color: #8f9ad0;
+        }
+
+        .composer-footer,
+        .reply-form-actions,
+        .edit-actions,
+        .card-actions,
+        .suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .composer-footer {
+            justify-content: space-between;
+            margin-top: 14px;
+        }
+
+        .hint {
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        button {
+            border: none;
+            border-radius: 999px;
+            padding: 10px 16px;
+            font: inherit;
+            cursor: pointer;
+            transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, var(--primary), #7a00ff);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(255, 46, 166, 0.35), 0 0 42px rgba(122, 0, 255, 0.18);
+        }
+
+        .primary-btn:hover {
+            background: linear-gradient(135deg, var(--primary-dark), #5b00ff);
+        }
+
+        .ghost-btn {
+            background: linear-gradient(135deg, rgba(0, 245, 255, 0.14), rgba(91, 0, 255, 0.18));
+            color: #e6fbff;
+            border: 1px solid rgba(0, 245, 255, 0.16);
+        }
+
+        .ghost-btn:hover {
+            background: linear-gradient(135deg, rgba(0, 245, 255, 0.2), rgba(91, 0, 255, 0.24));
+        }
+
+        .danger-btn {
+            background: linear-gradient(135deg, rgba(255, 46, 166, 0.16), rgba(255, 61, 127, 0.24));
+            color: #ffd5eb;
+        }
+
+        .comment-list {
+            margin-top: 24px;
+            display: grid;
+            gap: 16px;
+        }
+
+        .comment-card {
+            padding: 18px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04), 0 18px 36px rgba(0, 0, 0, 0.28);
+        }
+
+        .comment-card::before {
+            content: "";
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 6px;
+            background: linear-gradient(180deg, #00f5ff, #ff2ea6);
+            box-shadow: 0 0 18px rgba(0, 245, 255, 0.4);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            color: #fff;
+            background: linear-gradient(135deg, #00f5ff, #5b00ff 45%, #ff2ea6 100%);
+            font-weight: bold;
+            box-shadow: 0 0 18px rgba(0, 245, 255, 0.32), 0 0 28px rgba(255, 46, 166, 0.18);
+        }
+
+        .name {
+            font-weight: 700;
+        }
+
+        .meta {
+            color: var(--muted);
+            font-size: 0.9rem;
+            margin-top: 2px;
+        }
+
+        .content {
+            margin: 14px 0 12px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-size: 1.02rem;
+        }
+
+        .card-actions {
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .mini-btn {
+            background: rgba(255, 255, 255, 0.06);
+            color: #c8d4ff;
+            padding: 8px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .mini-btn:hover {
+            background: rgba(0, 245, 255, 0.12);
+            color: #ffffff;
+        }
+
+        .mini-btn.active {
+            color: #fff;
+            background: linear-gradient(135deg, #ff2ea6, #5b00ff);
+            box-shadow: 0 0 16px rgba(255, 46, 166, 0.28);
+        }
+
+        .suggestion-panel {
+            margin-top: 14px;
+            padding: 16px;
+            background: linear-gradient(135deg, rgba(91, 0, 255, 0.16), rgba(0, 245, 255, 0.1), rgba(255, 46, 166, 0.08));
+            border: 1px dashed rgba(0, 245, 255, 0.28);
+            border-radius: 18px;
+            box-shadow: inset 0 0 20px rgba(0, 245, 255, 0.05);
+        }
+
+        .suggestions {
+            margin-top: 10px;
+        }
+
+        .chip {
+            background: linear-gradient(135deg, rgba(0, 245, 255, 0.16), rgba(255, 46, 166, 0.14));
+            color: #eefcff;
+            padding: 8px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(0, 245, 255, 0.2);
+            box-shadow: 0 0 12px rgba(0, 245, 255, 0.08);
+        }
+
+        .chip:hover {
+            background: linear-gradient(135deg, rgba(0, 245, 255, 0.24), rgba(255, 46, 166, 0.2));
+        }
+
+        .reply-thread {
+            margin-top: 16px;
+            margin-left: 24px;
+            padding-left: 18px;
+            border-left: 3px solid rgba(0, 245, 255, 0.26);
+            display: grid;
+            gap: 14px;
+        }
+
+        .reply-composer {
+            margin-top: 14px;
+            padding: 14px;
+            background: linear-gradient(180deg, rgba(13, 18, 38, 0.98), rgba(8, 12, 28, 0.98));
+        }
+
+        .reply-composer textarea,
+        .edit-box textarea {
+            min-height: 84px;
+        }
+
+        .edit-box {
+            margin-top: 12px;
+        }
+
+        .empty-state {
+            padding: 28px 18px;
+            border-radius: var(--radius-md);
+            text-align: center;
+            color: var(--muted);
+            background: linear-gradient(135deg, rgba(16, 21, 44, 0.94), rgba(10, 14, 31, 0.96));
+            border: 1px dashed rgba(0, 245, 255, 0.28);
+            box-shadow: inset 0 0 20px rgba(255, 46, 166, 0.04);
+        }
+
+        @keyframes floatOrb {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-18px);
+            }
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 18px 12px;
+            }
+
+            .hero,
+            .comment-app {
+                border-radius: 22px;
+            }
+
+            .hero {
+                padding: 24px;
+            }
+
+            .comment-app {
+                padding: 16px;
+            }
+
+            .reply-thread {
+                margin-left: 12px;
+                padding-left: 12px;
+            }
+
+            .card-header {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="shell">
+        <section class="hero">
+            <div class="hero-badges">
+                <span class="hero-badge">Live replies</span>
+                <span class="hero-badge">AI suggestions</span>
+                <span class="hero-badge">Colorful social feed</span>
+            </div>
+            <h1>Community Conversation</h1>
+            <p>Post, like, reply, edit, and delete comments in a social media-style thread. Every new comment also gets AI-style suggested replies you can use instantly.</p>
+            <div class="hero-stats">
+                <span class="stat-pill">12 active voices</span>
+                <span class="stat-pill">38 reactions today</span>
+                <span class="stat-pill">Reply-friendly thread</span>
+            </div>
+        </section>
+
+        <main class="comment-app">
+            <section class="composer">
+                <p class="section-label">Share Something</p>
+                <textarea id="newComment" placeholder="Write a public comment..."></textarea>
+                <div class="composer-footer">
+                    <span class="hint">Tip: suggestions appear after you post a comment.</span>
+                    <button class="primary-btn" id="postCommentBtn" type="button">Post Comment</button>
+                </div>
+            </section>
+
+            <section class="comment-list" id="comments"></section>
+        </main>
+    </div>
+
+    <script>
+        const comments = [
+            {
+                id: crypto.randomUUID(),
+                author: "Ava",
+                text: "I really like how this layout feels like a mini community feed instead of a plain comment box.",
+                likes: 3,
+                liked: false,
+                createdAt: new Date(Date.now() - 1000 * 60 * 18).toISOString(),
+                suggestions: buildSuggestions("I really like how this layout feels like a mini community feed instead of a plain comment box."),
+                replies: [
+                    {
+                        id: crypto.randomUUID(),
+                        author: "You",
+                        text: "That was the goal. A more social, interactive thread makes the page feel alive.",
+                        likes: 1,
+                        liked: false,
+                        createdAt: new Date(Date.now() - 1000 * 60 * 7).toISOString(),
+                        suggestions: []
+                    }
+                ]
+            }
+        ];
+
+        const commentsContainer = document.getElementById("comments");
+        const newCommentInput = document.getElementById("newComment");
+        const postCommentBtn = document.getElementById("postCommentBtn");
+
+        postCommentBtn.addEventListener("click", handlePostComment);
+        newCommentInput.addEventListener("keydown", (event) => {
+            if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+                handlePostComment();
+            }
+        });
+
+        renderComments();
+
+        function handlePostComment() {
+            const text = newCommentInput.value.trim();
+            if (!text) {
+                return;
+            }
+
+            comments.unshift(createEntry(text, "You"));
+            newCommentInput.value = "";
+            renderComments();
+        }
+
+        function createEntry(text, author) {
+            return {
+                id: crypto.randomUUID(),
+                author,
+                text,
+                likes: 0,
+                liked: false,
+                createdAt: new Date().toISOString(),
+                suggestions: buildSuggestions(text),
+                replies: []
+            };
+        }
+
+        function buildSuggestions(text) {
+            const cleaned = text.replace(/\s+/g, " ").trim();
+            const topic = cleaned.split(/[.!?]/)[0].slice(0, 52) || "your point";
+
+            return [
+                "Thanks for sharing!",
+                `Can you explain more about "${topic}"?`,
+                "I agree with you."
+            ];
+        }
+
+        function renderComments() {
+            commentsContainer.innerHTML = "";
+
+            if (!comments.length) {
+                const empty = document.createElement("div");
+                empty.className = "empty-state";
+                empty.textContent = "No comments yet. Start the conversation.";
+                commentsContainer.appendChild(empty);
+                return;
+            }
+
+            comments.forEach((comment) => {
+                commentsContainer.appendChild(renderCard(comment, true, comment.id));
+            });
+        }
+
+        function renderCard(item, isComment, parentId) {
+            const card = document.createElement("article");
+            card.className = "comment-card";
+
+            const isEditing = item.isEditing === true;
+            const isReplying = item.isReplying === true && isComment;
+
+            if (isEditing) {
+                card.appendChild(createEditView(item, parentId, isComment));
+                return card;
+            }
+
+            const header = document.createElement("div");
+            header.className = "card-header";
+            header.innerHTML = `
+                <div class="profile">
+                    <div class="avatar">${item.author.charAt(0).toUpperCase()}</div>
+                    <div>
+                        <div class="name">${escapeHtml(item.author)}</div>
+                        <div class="meta">${formatTime(item.createdAt)}${item.edited ? " • edited" : ""}</div>
+                    </div>
+                </div>
+            `;
+
+            const content = document.createElement("div");
+            content.className = "content";
+            content.textContent = item.text;
+
+            const actions = document.createElement("div");
+            actions.className = "card-actions";
+
+            const likeBtn = createActionButton(item.liked ? `Liked (${item.likes})` : `Like (${item.likes})`, item.liked);
+            likeBtn.addEventListener("click", () => toggleLike(item.id, parentId, isComment));
+            actions.appendChild(likeBtn);
+
+            if (isComment) {
+                const replyBtn = createActionButton(isReplying ? "Cancel Reply" : "Reply");
+                replyBtn.addEventListener("click", () => toggleReplyForm(item.id));
+                actions.appendChild(replyBtn);
+            }
+
+            const editBtn = createActionButton("Edit");
+            editBtn.addEventListener("click", () => toggleEdit(item.id, parentId, isComment, true));
+            actions.appendChild(editBtn);
+
+            const deleteBtn = createActionButton("Delete");
+            deleteBtn.classList.add("danger-btn");
+            deleteBtn.addEventListener("click", () => deleteEntry(item.id, parentId, isComment));
+            actions.appendChild(deleteBtn);
+
+            card.append(header, content, actions);
+
+            if (isComment && item.suggestions.length) {
+                const suggestionPanel = document.createElement("div");
+                suggestionPanel.className = "suggestion-panel";
+                suggestionPanel.innerHTML = '<strong>AI suggested replies</strong>';
+
+                const suggestionRow = document.createElement("div");
+                suggestionRow.className = "suggestions";
+
+                item.suggestions.forEach((suggestion) => {
+                    const suggestionBtn = document.createElement("button");
+                    suggestionBtn.type = "button";
+                    suggestionBtn.className = "chip";
+                    suggestionBtn.textContent = suggestion;
+                    suggestionBtn.addEventListener("click", () => addReply(parentId, suggestion));
+                    suggestionRow.appendChild(suggestionBtn);
+                });
+
+                suggestionPanel.appendChild(suggestionRow);
+                card.appendChild(suggestionPanel);
+            }
+
+            if (isComment && isReplying) {
+                card.appendChild(createReplyComposer(item.id));
+            }
+
+            if (isComment && item.replies.length) {
+                const thread = document.createElement("div");
+                thread.className = "reply-thread";
+
+                item.replies.forEach((reply) => {
+                    thread.appendChild(renderCard(reply, false, item.id));
+                });
+
+                card.appendChild(thread);
+            }
+
+            return card;
+        }
+
+        function createEditView(item, parentId, isComment) {
+            const wrapper = document.createElement("div");
+            wrapper.className = "edit-box";
+
+            const textarea = document.createElement("textarea");
+            textarea.value = item.text;
+            wrapper.appendChild(textarea);
+
+            const actions = document.createElement("div");
+            actions.className = "edit-actions";
+
+            const saveBtn = document.createElement("button");
+            saveBtn.type = "button";
+            saveBtn.className = "primary-btn";
+            saveBtn.textContent = "Save";
+            saveBtn.addEventListener("click", () => saveEdit(item.id, parentId, isComment, textarea.value));
+
+            const cancelBtn = document.createElement("button");
+            cancelBtn.type = "button";
+            cancelBtn.className = "ghost-btn";
+            cancelBtn.textContent = "Cancel";
+            cancelBtn.addEventListener("click", () => toggleEdit(item.id, parentId, isComment, false));
+
+            actions.append(saveBtn, cancelBtn);
+            wrapper.appendChild(actions);
+            return wrapper;
+        }
+
+        function createReplyComposer(commentId) {
+            const box = document.createElement("div");
+            box.className = "reply-composer";
+
+            const textarea = document.createElement("textarea");
+            textarea.placeholder = "Write a reply...";
+
+            const actions = document.createElement("div");
+            actions.className = "reply-form-actions";
+
+            const sendBtn = document.createElement("button");
+            sendBtn.type = "button";
+            sendBtn.className = "primary-btn";
+            sendBtn.textContent = "Post Reply";
+            sendBtn.addEventListener("click", () => addReply(commentId, textarea.value));
+
+            const cancelBtn = document.createElement("button");
+            cancelBtn.type = "button";
+            cancelBtn.className = "ghost-btn";
+            cancelBtn.textContent = "Cancel";
+            cancelBtn.addEventListener("click", () => toggleReplyForm(commentId));
+
+            actions.append(sendBtn, cancelBtn);
+            box.append(textarea, actions);
+            return box;
+        }
+
+        function createActionButton(label, active = false) {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = `mini-btn${active ? " active" : ""}`;
+            button.textContent = label;
+            return button;
+        }
+
+        function toggleLike(itemId, parentId, isComment) {
+            const item = getEntry(itemId, parentId, isComment);
+            if (!item) {
+                return;
+            }
+
+            item.liked = !item.liked;
+            item.likes += item.liked ? 1 : -1;
+            renderComments();
+        }
+
+        function toggleReplyForm(commentId) {
+            comments.forEach((comment) => {
+                comment.isReplying = comment.id === commentId ? !comment.isReplying : false;
+                comment.isEditing = false;
+            });
+            renderComments();
+        }
+
+        function addReply(commentId, text) {
+            const replyText = String(text).trim();
+            if (!replyText) {
+                return;
+            }
+
+            const comment = comments.find((entry) => entry.id === commentId);
+            if (!comment) {
+                return;
+            }
+
+            comment.replies.push({
+                id: crypto.randomUUID(),
+                author: "You",
+                text: replyText,
+                likes: 0,
+                liked: false,
+                createdAt: new Date().toISOString(),
+                suggestions: []
+            });
+            comment.isReplying = false;
+            renderComments();
+        }
+
+        function toggleEdit(itemId, parentId, isComment, value) {
+            if (isComment) {
+                comments.forEach((comment) => {
+                    comment.isEditing = comment.id === itemId ? value : false;
+                    if (comment.id === itemId && value) {
+                        comment.isReplying = false;
+                    }
+                    comment.replies.forEach((reply) => {
+                        reply.isEditing = false;
+                    });
+                });
+            } else {
+                comments.forEach((comment) => {
+                    comment.isEditing = false;
+                    comment.replies.forEach((reply) => {
+                        reply.isEditing = reply.id === itemId && comment.id === parentId ? value : false;
+                    });
+                });
+            }
+            renderComments();
+        }
+
+        function saveEdit(itemId, parentId, isComment, newText) {
+            const cleaned = newText.trim();
+            if (!cleaned) {
+                return;
+            }
+
+            const item = getEntry(itemId, parentId, isComment);
+            if (!item) {
+                return;
+            }
+
+            item.text = cleaned;
+            item.edited = true;
+            item.isEditing = false;
+            if (isComment) {
+                item.suggestions = buildSuggestions(cleaned);
+            }
+            renderComments();
+        }
+
+        function deleteEntry(itemId, parentId, isComment) {
+            if (isComment) {
+                const index = comments.findIndex((comment) => comment.id === itemId);
+                if (index >= 0) {
+                    comments.splice(index, 1);
+                }
+            } else {
+                const parent = comments.find((comment) => comment.id === parentId);
+                if (!parent) {
+                    return;
+                }
+                parent.replies = parent.replies.filter((reply) => reply.id !== itemId);
+            }
+            renderComments();
+        }
+
+        function getEntry(itemId, parentId, isComment) {
+            if (isComment) {
+                return comments.find((comment) => comment.id === itemId);
+            }
+
+            const parent = comments.find((comment) => comment.id === parentId);
+            return parent ? parent.replies.find((reply) => reply.id === itemId) : null;
+        }
+
+        function formatTime(isoString) {
+            const date = new Date(isoString);
+            const diffMinutes = Math.round((Date.now() - date.getTime()) / 60000);
+
+            if (diffMinutes < 1) {
+                return "Just now";
+            }
+            if (diffMinutes < 60) {
+                return `${diffMinutes}m ago`;
+            }
+
+            const diffHours = Math.round(diffMinutes / 60);
+            if (diffHours < 24) {
+                return `${diffHours}h ago`;
+            }
+
+            return date.toLocaleDateString(undefined, {
+                day: "numeric",
+                month: "short",
+                year: "numeric"
+            });
+        }
+
+        function escapeHtml(text) {
+            return text
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+        }
+    </script>
+</body>
+</html>

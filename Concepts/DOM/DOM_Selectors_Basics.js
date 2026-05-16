@@ -175,3 +175,15 @@ document.body.appendChild(formAdder2);
 let password=document.getElementById("password").value;
 let email=document.getElementById("email").value;
 let number=document.getElementById("number").value;
+if(password.length<8 || password.length>12){
+    alert("Please enter your password of length between 8 and 12!");
+    return;
+} 
+if(!"[EMAIL_ADDRESS]".match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)){
+    alert("Please enter a valid email address!");
+    return;
+}   
+if(number.length<10 || number.length>10){
+    alert("Please enter your 10 digit number!");
+    return;
+}   

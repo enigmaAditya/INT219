@@ -1,0 +1,32 @@
+<!-- create a product listing page where each product has an "Add to cart" button. When user clicks a button, the corresponding product name should be displyed in a message area below the product listing. -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product App</title>
+    <link rel="stylesheet" href="activity9.css">
+</head>
+<body>
+    <div class="container">
+        <div id="product-list">
+            <!-- Products will be dynamically added here -->
+            <div class="product">
+                <h3>Product 1</h3>
+                <button class="add-to-cart" data-product-name="Product 1">Add to Cart - Product 1</button>
+            </div>
+            <div class="product">
+                <h3>Product 2</h3>
+                <button class="add-to-cart" data-product-name="Product 2">Add to Cart - Product 2</button>
+            </div>
+        </div>
+        <div id="message-area">
+            <!-- Messages will be displayed here -->
+        </div>
+    </div>
+
+    <script src="activity9.js"></script>
+</body>
+</html>
+

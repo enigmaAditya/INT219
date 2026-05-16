@@ -73,4 +73,10 @@ modebutton.addEventListener('click',()=>{
 
 //Focus event: Triggered when an element gains focus (e.g., when a user clicks on an input field or tabs to it).
 //Blur event: Triggered when an element loses focus (e.g., when a user clicks away from an input field or tabs out of it).
-
+// example of focus and blur 
+box1.addEventListener('focus',()=>{
+    box1.style.backgroundColor='red';
+});
+box1.addEventListener('blur',()=>{
+    box1.style.backgroundColor='blue';
+});

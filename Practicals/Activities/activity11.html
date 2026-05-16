@@ -1,0 +1,247 @@
+<!-- design a responsive learning platform homepage using flexbox for navigation, css grid for layout with sidebar and cards, and media queries for tablet and mobile views -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* Basic styles for navigation */
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+            font-family: Arial, sans-serif;
+            margin:10px 15px 0 15px;
+        }
+        nav{
+            width: 100%;
+        }
+        nav ul {
+            position: sticky;
+            top:0;
+            display: flex;
+            /* flex-direction: column; */
+            justify-content: space-between;
+            list-style: none;
+            background-color: #333;
+            padding: 0;
+            border-radius: 50px;
+            opacity: 0.9;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+        }
+        nav ul li:first-child {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            padding: 14px 20px;
+        }
+        nav ul li {
+            padding: 14px 20px;
+            color: white;
+        }
+        aside ul{
+            list-style: none;
+        }
+        .hamburger {
+            display: none;
+        }
+        nav ul input[type="search"]{
+            width:20%;
+            padding: 10px;
+            border: none;
+            margin: 14px ;
+            border-radius: 20px;
+            /* margin-right: 20px; */
+        }
+
+
+        /* Container for sidebar and content */
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        /* Content styles */
+        .content {
+            display: grid;
+            grid-template-rows: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background-color: #e2e2e2;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .formSelect{
+            display:grid;
+            grid-template-columns: 2fr 2fr ;
+            gap: 20px;
+            padding: 20px;
+        }
+        .regform{
+            background-color: aquamarine;
+            padding:20px;
+        }
+
+        .container2 {
+    display: grid;
+
+    grid-template-columns: 200px 200px ;
+    /* grid-template-rows: 100px 100px; */
+}
+
+
+        /* Media query for tablets */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr; /* Stack sidebar and content */
+            }
+
+            .content {
+                grid-template-columns: repeat(2, 1fr); /* Two columns for cards */
+            }
+
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Media query for mobile */
+        @media (max-width: 480px) {
+            .content {
+                grid-template-columns: 1fr; /* Stack cards vertically */
+            }
+            /* nav hamburger */
+            .hamburger {
+                display: block;
+                background: none;
+                border: none;
+                color: white;
+                font-size: 24px;
+                cursor: pointer;
+                padding: 14px 20px;
+            }
+            .nav-right {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: #333;
+                flex-direction: column;
+                align-items: center;
+                border-radius: 0 0 20px 20px;
+            }
+            .nav-right.mobile {
+                display: flex;
+            }
+            nav ul {
+                position: relative;
+            }       
+        }
+
+
+    </style>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <!-- add a logo text to the flex-start -->
+             <logo>
+                <li>LearnHub</li>
+            </logo>
+            <button class="hamburger" onclick="toggleMenu()">☰</button>
+            <div class="nav-right">
+                <input type="search" placeholder="Search...">
+                <li>Home</li>
+                <li>Courses</li>
+                <li>About</li>
+                <li>Contact</li>
+            </div>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <h2>Sidebar</h2>
+            <p>Links and information here</p>
+        </aside>
+
+        <main class="content">
+            <div class="card">Course 1</div>
+            <div class="card">Course 2</div>
+            <div class="card">Course 3</div>
+        </main>
+    </div>
+    <div class="formSelect">
+
+        <aside class="sidebar">
+            <fieldset>
+                <legend><h2>Address</h2></legend><br>
+                <ul>
+                    <h4>Address</h4>
+                    <li>xyz colony</li><br>
+                    <h4>Contact</h4>
+                    <li>93048 06208</li><br>
+
+                </ul>
+            </fieldset>
+        </aside>
+        <main class="regform">
+            <form action="/register" method="POST">
+                <fieldset>
+                    <legend>Register</legend>
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required><br>
+                    <label>
+  <svg class="icon" viewBox="0 0" aria-hidden="true" >
+    <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.22 11.36 11.36 0 003.55.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.36 11.36 0 00.57 3.55 1 1 0 01-.22 1.11l-2.2 2.2z"/>
+  </svg>
+  Phone:
+</label>
+<input type="tel" name="phone" required><br>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required><br>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required><br>
+                    <button type="submit">Register</button>
+                </fieldset>
+            </form>
+        </main>
+    </div>
+    <div class="container2">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+</div>
+
+
+
+    <script>
+        function toggleMenu() {
+            document.querySelector('.nav-right').classList.toggle('mobile');
+        }
+    </script>
+</body>
+</html>
