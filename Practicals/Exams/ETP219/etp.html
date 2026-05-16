@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Data</title>
+</head>
+<body>
+    <button id="btn1">Load Student Data</button>
+    <div class="content"></div>
+
+    <script>
+        let btn = document.getElementById('btn1')
+        let studentsss =[
+                        { name: 'Aditya',
+                          roll: '53',
+                          course: 'INT219' },
+                        { name: 'Devansh',
+                          roll: '52',
+                          course: 'INT222'},
+                        { name: 'Ankit',
+                          roll: '51',
+                          course: 'INT219'
+                        }
+                    ]
+        function loadData() {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve(studentsss);
+                }, 1500);
+            });
+        }
+
+        function getData(students) {
+            const container = document.querySelector('.content');
+            container.innerHTML = '';
+            students.forEach(student => {
+                const div = document.createElement('div');
+                div.textContent = `Name: ${student.name}, Roll Number: ${student.roll}, Course: ${student.course}`;
+                container.appendChild(div);
+            });
+        }
+        btn.addEventListener('click', async () => {
+            const studentContainer = document.querySelector('.content');
+            studentContainer.textContent = 'Loading student data...';
+
+            try {
+                const students = await loadData();
+                getData(students);
+            } catch (error) {
+                studentContainer.textContent = 'Failed to load student data.';
+            }
+        });
+    </script>
+</body>
+</html>
